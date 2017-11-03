@@ -1,0 +1,27 @@
+{
+    "name": "inetstudio/classifiers",
+    "description": "Package for classifiers",
+    "homepage": "https://github.com/inetstudio/classifiers",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Konstantin Bukin",
+        "email": "bukin@inetstudio.ru"
+      }
+    ],
+    "require": {
+      "inetstudio/admin-panel": "1.5.*"
+    },
+    "autoload": {
+      "psr-4": {
+        "InetStudio\\Classifiers\\": "src/"
+      }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "InetStudio\\Classifiers\\Providers\\ClassifiersServiceProvider"
+        ]
+      }
+    }
+}

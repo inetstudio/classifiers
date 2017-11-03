@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateClassifiersTables extends Migration
+{
+    public function up()
+    {
+        Schema::create('classifiers', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('type');
+            $table->string('value');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('classifierables', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('classifier_model_id')->unsigned();
+            $table->morphs('classifierable');
+            $table->timestamps();
+
+            $table->foreign('classifier_model_id')->references('id')->on('classifiers')->onDelete('cascade');
+        });
+    }
+
+    public function down()
+    {
+        Schema::drop('classifiers');
+        Schema::drop('classifierables');
+    }
+}
