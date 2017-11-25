@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
-use InetStudio\AdminPanel\Traits\DatatablesTrait;
 use InetStudio\Classifiers\Models\ClassifierModel;
 use InetStudio\Classifiers\Transformers\ClassifierTransformer;
 use InetStudio\Classifiers\Http\Requests\Back\SaveClassifierRequest;
+use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
 
 /**
  * Контроллер для управления классификаторами.
