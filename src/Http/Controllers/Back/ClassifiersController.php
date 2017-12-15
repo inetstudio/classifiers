@@ -2,9 +2,12 @@
 
 namespace InetStudio\Classifiers\Http\Controllers\Back;
 
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Classifiers\Models\ClassifierModel;
 use InetStudio\Classifiers\Transformers\ClassifierTransformer;
@@ -26,11 +29,11 @@ class ClassifiersController extends Controller
      * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(DataTables $dataTable)
+    public function index(DataTables $dataTable): View
     {
         $table = $this->generateTable($dataTable, 'classifiers', 'index');
 
-        return view('admin.module.classifiers::pages.index', compact('table'));
+        return view('admin.module.classifiers::back.pages.index', compact('table'));
     }
 
     /**
@@ -53,9 +56,9 @@ class ClassifiersController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
-        return view('admin.module.classifiers::pages.form', [
+        return view('admin.module.classifiers::back.pages.form', [
             'item' => new ClassifierModel(),
         ]);
     }
@@ -66,7 +69,7 @@ class ClassifiersController extends Controller
      * @param SaveClassifierRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(SaveClassifierRequest $request)
+    public function store(SaveClassifierRequest $request): RedirectResponse
     {
         return $this->save($request);
     }
@@ -77,11 +80,11 @@ class ClassifiersController extends Controller
      * @param null $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id = null)
+    public function edit($id = null): View
     {
         if (! is_null($id) && $id > 0 && $item = ClassifierModel::find($id)) {
 
-            return view('admin.module.classifiers::pages.form', [
+            return view('admin.module.classifiers::back.pages.form', [
                 'item' => $item,
             ]);
         } else {
@@ -96,7 +99,7 @@ class ClassifiersController extends Controller
      * @param null $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(SaveClassifierRequest $request, $id = null)
+    public function update(SaveClassifierRequest $request, $id = null): RedirectResponse
     {
         return $this->save($request, $id);
     }
@@ -108,7 +111,7 @@ class ClassifiersController extends Controller
      * @param null $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function save($request, $id = null)
+    private function save($request, $id = null): RedirectResponse
     {
         if (! is_null($id) && $id > 0 && $item = ClassifierModel::find($id)) {
             $action = 'отредактирован';
@@ -123,7 +126,9 @@ class ClassifiersController extends Controller
 
         Session::flash('success', 'Классификатор «'.$item->type.' / '.$item->value.'» успешно '.$action);
 
-        return redirect()->to(route('back.classifiers.edit', $item->fresh()->id));
+        return response()->redirectToRoute('back.classifiers.edit', [
+            $item->fresh()->id,
+        ]);
     }
 
     /**
@@ -132,7 +137,7 @@ class ClassifiersController extends Controller
      * @param null $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id = null)
+    public function destroy($id = null): JsonResponse
     {
         if (! is_null($id) && $id > 0 && $item = ClassifierModel::find($id)) {
             $item->delete();
@@ -154,7 +159,7 @@ class ClassifiersController extends Controller
      * @param $type
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSuggestions(Request $request, $type = '')
+    public function getSuggestions(Request $request, $type = ''): JsonResponse
     {
         $search = $request->get('q');
         $data = [];

@@ -9,7 +9,7 @@
 @section('content')
 
     @push('breadcrumbs')
-        @include('admin.module.classifiers::partials.breadcrumbs')
+        @include('admin.module.classifiers::back.partials.breadcrumbs')
         <li>
             <a href="{{ route('back.classifiers.index') }}">Классификаторы</a>
         </li>

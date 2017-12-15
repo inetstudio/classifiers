@@ -12,7 +12,7 @@ trait ClassifiersManipulationsTrait
      * @param $item
      * @param $request
      */
-    private function saveClassifiers($item, $request)
+    private function saveClassifiers($item, $request): void
     {
         if ($request->filled('classifiers')) {
             $item->syncClassifiers(ClassifierModel::whereIn('id', (array) $request->get('classifiers'))->get());

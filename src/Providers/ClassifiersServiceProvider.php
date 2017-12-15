@@ -7,7 +7,12 @@ use InetStudio\Classifiers\Console\Commands\SetupCommand;
 
 class ClassifiersServiceProvider extends ServiceProvider
 {
-    public function boot()
+    /**
+     * Загрузка сервиса.
+     *
+     * @return void
+     */
+    public function boot(): void
     {
         $this->registerConsoleCommands();
         $this->registerPublishes();
@@ -16,21 +21,21 @@ class ClassifiersServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the application services.
+     * Регистрация привязки в контейнере.
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
 
     }
 
     /**
-     * Register Classifiers's console commands.
+     * Регистрация команд.
      *
      * @return void
      */
-    protected function registerConsoleCommands()
+    protected function registerConsoleCommands(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -40,11 +45,11 @@ class ClassifiersServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup the resource publishing groups for Classifiers.
+     * Регистрация ресурсов.
      *
      * @return void
      */
-    protected function registerPublishes()
+    protected function registerPublishes(): void
     {
         $this->publishes([
             __DIR__.'/../../config/classifiers.php' => config_path('classifiers.php'),
@@ -61,21 +66,21 @@ class ClassifiersServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register Classifiers's routes.
+     * Регистрация путей.
      *
      * @return void
      */
-    protected function registerRoutes()
+    protected function registerRoutes(): void
     {
         $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
     }
 
     /**
-     * Register Classifiers's views.
+     * Регистрация представлений.
      *
      * @return void
      */
-    protected function registerViews()
+    protected function registerViews(): void
     {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'admin.module.classifiers');
     }
