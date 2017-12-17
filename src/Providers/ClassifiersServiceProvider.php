@@ -2,8 +2,12 @@
 
 namespace InetStudio\Classifiers\Providers;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use InetStudio\Classifiers\Events\ModifyClassifierEvent;
 use InetStudio\Classifiers\Console\Commands\SetupCommand;
+use InetStudio\Classifiers\Services\Front\ClassifiersService;
+use InetStudio\Classifiers\Listeners\ClearClassifiersCacheListener;
 
 class ClassifiersServiceProvider extends ServiceProvider
 {
@@ -18,6 +22,7 @@ class ClassifiersServiceProvider extends ServiceProvider
         $this->registerPublishes();
         $this->registerRoutes();
         $this->registerViews();
+        $this->registerEvents();
     }
 
     /**
@@ -27,7 +32,7 @@ class ClassifiersServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        $this->registerBindings();
     }
 
     /**
@@ -83,5 +88,25 @@ class ClassifiersServiceProvider extends ServiceProvider
     protected function registerViews(): void
     {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'admin.module.classifiers');
+    }
+
+    /**
+     * Регистрация событий.
+     *
+     * @return void
+     */
+    protected function registerEvents(): void
+    {
+        Event::listen(ModifyClassifierEvent::class, ClearClassifiersCacheListener::class);
+    }
+
+    /**
+     * Регистрация привязок, алиасов и сторонних провайдеров сервисов.
+     *
+     * @return void
+     */
+    public function registerBindings(): void
+    {
+        $this->app->bind('ClassifiersService', ClassifiersService::class);
     }
 }

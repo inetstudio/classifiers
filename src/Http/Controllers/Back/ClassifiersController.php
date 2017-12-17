@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use InetStudio\Classifiers\Models\ClassifierModel;
+use InetStudio\Classifiers\Events\ModifyClassifierEvent;
 use InetStudio\Classifiers\Transformers\ClassifierTransformer;
 use InetStudio\Classifiers\Http\Requests\Back\SaveClassifierRequest;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
@@ -28,6 +29,7 @@ class ClassifiersController extends Controller
      *
      * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
      */
     public function index(DataTables $dataTable): View
     {
@@ -40,12 +42,13 @@ class ClassifiersController extends Controller
      * DataTables serverside.
      *
      * @return mixed
+     * @throws \Exception
      */
     public function data()
     {
         $items = ClassifierModel::query();
 
-        return Datatables::of($items)
+        return DataTables::of($items)
             ->setTransformer(new ClassifierTransformer)
             ->escapeColumns(['actions'])
             ->make();
@@ -125,6 +128,8 @@ class ClassifiersController extends Controller
         $item->save();
 
         Session::flash('success', 'Классификатор «'.$item->type.' / '.$item->value.'» успешно '.$action);
+
+        event(new ModifyClassifierEvent($item));
 
         return response()->redirectToRoute('back.classifiers.edit', [
             $item->fresh()->id,
