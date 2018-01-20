@@ -27,13 +27,12 @@ class ClassifiersController extends Controller
     /**
      * Список классификаторов.
      *
-     * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      */
-    public function index(DataTables $dataTable): View
+    public function index(): View
     {
-        $table = $this->generateTable($dataTable, 'classifiers', 'index');
+        $table = $this->generateTable('classifiers', 'index');
 
         return view('admin.module.classifiers::back.pages.index', compact('table'));
     }
