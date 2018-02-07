@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Collection;
 use InetStudio\Classifiers\Models\ClassifierModel;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
+/**
+ * Trait HasClassifiers
+ * @package InetStudio\Classifiers\Models\Traits
+ */
 trait HasClassifiers
 {
     /**

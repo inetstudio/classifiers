@@ -4,6 +4,10 @@ namespace InetStudio\Classifiers\Console\Commands;
 
 use Illuminate\Console\Command;
 
+/**
+ * Class SetupCommand
+ * @package InetStudio\Classifiers\Console\Commands
+ */
 class SetupCommand extends Command
 {
     /**

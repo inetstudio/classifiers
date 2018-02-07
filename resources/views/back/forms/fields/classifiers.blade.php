@@ -13,5 +13,7 @@
         'multiple' => 'multiple',
         'data-source' => route('back.classifiers.getSuggestions', ['type' => $attributes['field']['type']]),
     ],
-    'options' => (old('classifiers')) ? \InetStudio\Classifiers\Models\ClassifierModel::whereIn('id', old('classifiers'))->where('type', $attributes['field']['type'])->pluck('classifiers.value', 'classifiers.id')->toArray() : $item->classifiers()->where('type', $attributes['field']['type'])->pluck('classifiers.value', 'classifiers.id')->toArray(),
+    'options' => [
+        'values' => (old('classifiers')) ? \InetStudio\Classifiers\Models\ClassifierModel::whereIn('id', old('classifiers'))->where('type', $attributes['field']['type'])->pluck('classifiers.value', 'classifiers.id')->toArray() : $item->classifiers()->where('type', $attributes['field']['type'])->pluck('classifiers.value', 'classifiers.id')->toArray(),
+    ],
 ]) !!}

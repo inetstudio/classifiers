@@ -11,7 +11,6 @@ return [
             'index' => [
                 'url' => 'back.classifiers.data',
                 'type' => 'POST',
-                'data' => 'function(data) { data._token = $(\'meta[name="csrf-token"]\').attr(\'content\'); }',
             ],
         ],
         'table' => [

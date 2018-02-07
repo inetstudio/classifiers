@@ -9,10 +9,7 @@
 @section('content')
 
     @push('breadcrumbs')
-        @include('admin.module.classifiers::back.partials.breadcrumbs')
-        <li>
-            <a href="{{ route('back.classifiers.index') }}">Классификаторы</a>
-        </li>
+        @include('admin.module.classifiers::back.partials.breadcrumbs.form')
     @endpush
 
     <div class="row m-sm">
@@ -25,13 +22,13 @@
 
         {!! Form::info() !!}
 
-        {!! Form::open(['url' => (!$item->id) ? route('back.classifiers.store') : route('back.classifiers.update', [$item->id]), 'id' => 'mainForm', 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal']) !!}
+        {!! Form::open(['url' => (! $item->id) ? route('back.classifiers.store') : route('back.classifiers.update', [$item->id]), 'id' => 'mainForm', 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal']) !!}
 
             @if ($item->id)
                 {{ method_field('PUT') }}
             @endif
 
-            {!! Form::hidden('classifier_id', (!$item->id) ? '' : $item->id) !!}
+            {!! Form::hidden('classifier_id', (! $item->id) ? '' : $item->id) !!}
 
             <div class="row">
                 <div class="col-lg-12">
@@ -56,12 +53,20 @@
                                             'style' => 'width: 100%',
                                             'data-source' => route('back.classifiers.getSuggestions', ['type' => '']),
                                         ],
-                                        'options' => (old('type')) ? \InetStudio\Classifiers\Models\ClassifierModel::where('type', old('type'))->pluck('type', 'type')->toArray() : ['id' => $item->type, 'text' => $item->type],
+                                        'options' => [
+                                            'values' => (old('type')) ? \InetStudio\Classifiers\Models\ClassifierModel::where('type', old('type'))->pluck('type', 'type')->toArray() : ['id' => $item->type, 'text' => $item->type],
+                                        ],
                                     ]) !!}
 
                                     {!! Form::string('value', $item->value, [
                                         'label' => [
                                             'title' => 'Значение',
+                                        ],
+                                    ]) !!}
+
+                                    {!! Form::string('alias', $item->alias, [
+                                        'label' => [
+                                            'title' => 'Алиас',
                                         ],
                                     ]) !!}
 

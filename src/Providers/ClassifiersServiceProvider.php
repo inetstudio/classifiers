@@ -9,6 +9,10 @@ use InetStudio\Classifiers\Console\Commands\SetupCommand;
 use InetStudio\Classifiers\Services\Front\ClassifiersService;
 use InetStudio\Classifiers\Listeners\ClearClassifiersCacheListener;
 
+/**
+ * Class ClassifiersServiceProvider
+ * @package InetStudio\Classifiers\Providers
+ */
 class ClassifiersServiceProvider extends ServiceProvider
 {
     /**

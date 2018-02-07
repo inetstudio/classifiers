@@ -1,17 +1,24 @@
 <?php
 
-namespace Inetstudio\Classifiers\Transformers;
+namespace InetStudio\Classifiers\Transformers\Back;
 
 use League\Fractal\TransformerAbstract;
 use InetStudio\Classifiers\Models\ClassifierModel;
 
+/**
+ * Class ClassifierTransformer
+ * @package InetStudio\Classifiers\Transformers\Back
+ */
 class ClassifierTransformer extends TransformerAbstract
 {
     /**
      * Подготовка данных для отображения в таблице.
      *
      * @param ClassifierModel $classifier
+     *
      * @return array
+     *
+     * @throws \Throwable
      */
     public function transform(ClassifierModel $classifier): array
     {

@@ -11,6 +11,7 @@ class CreateClassifiersTables extends Migration
             $table->increments('id');
             $table->string('type');
             $table->string('value');
+            $table->string('alias')->default('');
             $table->timestamps();
             $table->softDeletes();
         });

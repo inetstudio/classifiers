@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class SaveClassifierRequest
+ * @package InetStudio\Classifiers\Http\Requests\Back
+ */
 class SaveClassifierRequest extends FormRequest
 {
     /**
@@ -31,6 +35,8 @@ class SaveClassifierRequest extends FormRequest
             'value.required' => 'Поле «Значение» обязательно для заполнения',
             'value.max' => 'Поле «Значение» не должно превышать 255 символов',
             'value.unique' => 'Такое значение поля «Значение» уже существует',
+            'alias.max' => 'Поле «Алиас» не должно превышать 255 символов',
+            'alias.unique' => 'Такое значение поля «Алиас» уже существует',
         ];
     }
 
@@ -50,7 +56,8 @@ class SaveClassifierRequest extends FormRequest
                 Rule::unique('classifiers', 'value')->ignore($request->get('classifier_id'))->where(function ($query) use ($request) {
                     $query->where('type', $request->get('type'));
                 }),
-            ]
+            ],
+            'alias' => 'max:255|unique:classifiers,alias,'.$request->get('classifier_id'),
         ];
     }
 }
