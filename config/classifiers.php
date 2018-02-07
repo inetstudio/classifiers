@@ -29,6 +29,7 @@ return [
             'index' => [
                 ['data' => 'type', 'name' => 'type', 'title' => 'Тип'],
                 ['data' => 'value', 'name' => 'value', 'title' => 'Значение'],
+                ['data' => 'alias', 'name' => 'alias', 'title' => 'Алиас'],
                 ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
                 ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
                 ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],

@@ -26,6 +26,7 @@ class ClassifierTransformer extends TransformerAbstract
             'id' => (int) $classifier->id,
             'type' => $classifier->type,
             'value' => $classifier->value,
+            'alias' => $classifier->alias,
             'created_at' => (string) $classifier->created_at,
             'updated_at' => (string) $classifier->updated_at,
             'actions' => view('admin.module.classifiers::back.partials.datatables.actions', [
