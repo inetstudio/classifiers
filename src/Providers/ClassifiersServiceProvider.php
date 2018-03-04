@@ -112,5 +112,8 @@ class ClassifiersServiceProvider extends ServiceProvider
     public function registerBindings(): void
     {
         $this->app->bind('ClassifiersService', ClassifiersService::class);
+
+        // Services
+        $this->app->bind('InetStudio\Classifiers\Contracts\Services\Back\ClassifiersServiceContract', 'InetStudio\Classifiers\Services\Back\ClassifiersService');
     }
 }
