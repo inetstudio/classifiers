@@ -7,8 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class SaveClassifierRequest
- * @package InetStudio\Classifiers\Http\Requests\Back
+ * Class SaveClassifierRequest.
  */
 class SaveClassifierRequest extends FormRequest
 {

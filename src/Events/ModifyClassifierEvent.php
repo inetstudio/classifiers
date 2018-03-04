@@ -5,8 +5,7 @@ namespace InetStudio\Classifiers\Events;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class ModifyClassifierEvent
- * @package InetStudio\Classifiers\Events
+ * Class ModifyClassifierEvent.
  */
 class ModifyClassifierEvent
 {
