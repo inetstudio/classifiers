@@ -5,8 +5,7 @@ namespace InetStudio\Classifiers\Listeners;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Class ClearClassifiersCacheListener
- * @package InetStudio\Classifiers\Listeners
+ * Class ClearClassifiersCacheListener.
  */
 class ClearClassifiersCacheListener
 {

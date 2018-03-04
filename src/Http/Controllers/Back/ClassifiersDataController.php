@@ -8,8 +8,7 @@ use InetStudio\Classifiers\Models\ClassifierModel;
 use InetStudio\Classifiers\Transformers\Back\ClassifierTransformer;
 
 /**
- * Class ClassifiersDataController
- * @package InetStudio\Classifiers\Http\Controllers\Back
+ * Class ClassifiersDataController.
  */
 class ClassifiersDataController extends Controller
 {

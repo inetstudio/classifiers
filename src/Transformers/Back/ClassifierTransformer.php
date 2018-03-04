@@ -6,8 +6,7 @@ use League\Fractal\TransformerAbstract;
 use InetStudio\Classifiers\Models\ClassifierModel;
 
 /**
- * Class ClassifierTransformer
- * @package InetStudio\Classifiers\Transformers\Back
+ * Class ClassifierTransformer.
  */
 class ClassifierTransformer extends TransformerAbstract
 {

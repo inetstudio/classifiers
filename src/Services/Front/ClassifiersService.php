@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use InetStudio\Classifiers\Models\ClassifierModel;
 
 /**
- * Class ClassifiersService
- * @package InetStudio\Classifiers\Services\Front
+ * Class ClassifiersService.
  */
 class ClassifiersService
 {
@@ -25,7 +24,7 @@ class ClassifiersService
     {
         $cacheKey = 'ClassifiersService_getClassifiersByTypeOrValue_'.md5($type.'_'.$value.'_'.$alias);
 
-        return Cache::tags(['classifiers'])->remember($cacheKey, 1440, function() use ($type, $value, $alias) {
+        return Cache::tags(['classifiers'])->remember($cacheKey, 1440, function () use ($type, $value, $alias) {
             $items = ClassifierModel::select(['id', 'type', 'value', 'alias']);
 
             if ($type) {

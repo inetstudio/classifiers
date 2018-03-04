@@ -13,8 +13,7 @@ use InetStudio\Classifiers\Http\Requests\Back\SaveClassifierRequest;
 use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
 
 /**
- * Class ClassifiersController
- * @package InetStudio\Classifiers\Http\Controllers\Back
+ * Class ClassifiersController.
  */
 class ClassifiersController extends Controller
 {
@@ -68,7 +67,6 @@ class ClassifiersController extends Controller
     public function edit($id = null): View
     {
         if (! is_null($id) && $id > 0 && $item = ClassifierModel::find($id)) {
-
             return view('admin.module.classifiers::back.pages.form', [
                 'item' => $item,
             ]);

@@ -8,8 +8,7 @@ use App\Http\Controllers\Controller;
 use InetStudio\Classifiers\Models\ClassifierModel;
 
 /**
- * Class ClassifiersUtilityController
- * @package InetStudio\Classifiers\Http\Controllers\Back
+ * Class ClassifiersUtilityController.
  */
 class ClassifiersUtilityController extends Controller
 {

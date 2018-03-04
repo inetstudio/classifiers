@@ -9,8 +9,7 @@ use InetStudio\Classifiers\Models\ClassifierModel;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
- * Trait HasClassifiers
- * @package InetStudio\Classifiers\Models\Traits
+ * Trait HasClassifiers.
  */
 trait HasClassifiers
 {

@@ -10,8 +10,7 @@ use InetStudio\Classifiers\Services\Front\ClassifiersService;
 use InetStudio\Classifiers\Listeners\ClearClassifiersCacheListener;
 
 /**
- * Class ClassifiersServiceProvider
- * @package InetStudio\Classifiers\Providers
+ * Class ClassifiersServiceProvider.
  */
 class ClassifiersServiceProvider extends ServiceProvider
 {

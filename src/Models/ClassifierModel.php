@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Venturecraft\Revisionable\RevisionableTrait;
 
 /**
- * InetStudio\Classifiers\Models\ClassifierModel
+ * InetStudio\Classifiers\Models\ClassifierModel.
  *
  * @property string|null $alias
  * @property \Carbon\Carbon|null $created_at
