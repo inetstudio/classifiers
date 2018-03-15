@@ -27,6 +27,5 @@ class FormBuilderServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
     }
 }
