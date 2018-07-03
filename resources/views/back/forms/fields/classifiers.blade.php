@@ -4,8 +4,7 @@
     $values = $item->classifiers()->where('type', $attributes['field']['type'])->pluck('classifiers.value', 'classifiers.id')->toArray();
 
     if (empty($values) && isset($attributes['field']['default'])) {
-        $values = \InetStudio\Classifiers\Models\ClassifierModel::where('type', $attributes['field']['type'])
-            ->whereIn('value', (array) $attributes['field']['default'])
+        $values = \InetStudio\Classifiers\Models\ClassifierModel::whereIn('alias', (array) $attributes['field']['default'])
             ->pluck('classifiers.value', 'classifiers.id')
             ->toArray();
     }
@@ -20,7 +19,9 @@
         'data-placeholder' => $attributes['field']['placeholder'],
         'style' => 'width: 100%',
         'data-source' => route('back.classifiers.getSuggestions', ['type' => $attributes['field']['type']]),
-    ], ((! isset($attributes['field']['multiple'])) || isset($attributes['field']['multiple']) && $attributes['field']['multiple']) ? ['multiple' => 'multiple'] : []),
+    ], ((! isset($attributes['field']['multiple'])) || isset($attributes['field']['multiple']) && $attributes['field']['multiple']) ? ['multiple' => 'multiple'] : [],
+       (isset($attributes['field']['disabled']) && $attributes['field']['disabled']) ? ['disabled' => 'disabled'] : []
+    ),
     'options' => [
         'values' => (old('classifiers')) ? \InetStudio\Classifiers\Models\ClassifierModel::whereIn('id', old('classifiers'))->where('type', $attributes['field']['type'])->pluck('classifiers.value', 'classifiers.id')->toArray() : $values,
     ],
