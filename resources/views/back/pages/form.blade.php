@@ -28,7 +28,9 @@
                 {{ method_field('PUT') }}
             @endif
 
-            {!! Form::hidden('classifier_id', (! $item->id) ? '' : $item->id) !!}
+            {!! Form::hidden('classifier_id', (! $item->id) ? '' : $item->id, ['id' => 'object-id']) !!}
+
+            {!! Form::hidden('classifier_type', get_class($item), ['id' => 'object-type']) !!}
 
             <div class="row">
                 <div class="col-lg-12">
