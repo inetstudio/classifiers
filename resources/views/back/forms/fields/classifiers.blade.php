@@ -20,7 +20,7 @@
         'style' => 'width: 100%',
         'data-source' => route('back.classifiers.getSuggestions', ['type' => $attributes['field']['type']]),
     ], ((! isset($attributes['field']['multiple'])) || isset($attributes['field']['multiple']) && $attributes['field']['multiple']) ? ['multiple' => 'multiple'] : [],
-       (isset($attributes['field']['disabled']) && $attributes['field']['disabled']) ? ['disabled' => 'disabled'] : []
+       (isset($attributes['field']['readonly']) && $attributes['field']['readonly']) ? ['readonly' => 'readonly'] : []
     ),
     'options' => [
         'values' => (old('classifiers')) ? \InetStudio\Classifiers\Models\ClassifierModel::whereIn('id', old('classifiers'))->where('type', $attributes['field']['type'])->pluck('classifiers.value', 'classifiers.id')->toArray() : $values,
