@@ -9,7 +9,7 @@ class CreateClassifiersTables extends Migration
     {
         Schema::create('classifiers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type');
+            $table->string('type')->index();
             $table->string('value');
             $table->string('alias')->default('');
             $table->timestamps();

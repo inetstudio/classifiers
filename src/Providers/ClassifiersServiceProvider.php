@@ -2,12 +2,8 @@
 
 namespace InetStudio\Classifiers\Providers;
 
-use Illuminate\Support\Facades\Event;
+use Collective\Html\FormBuilder;
 use Illuminate\Support\ServiceProvider;
-use InetStudio\Classifiers\Events\ModifyClassifierEvent;
-use InetStudio\Classifiers\Console\Commands\SetupCommand;
-use InetStudio\Classifiers\Services\Front\ClassifiersService;
-use InetStudio\Classifiers\Listeners\ClearClassifiersCacheListener;
 
 /**
  * Class ClassifiersServiceProvider.
@@ -25,7 +21,7 @@ class ClassifiersServiceProvider extends ServiceProvider
         $this->registerPublishes();
         $this->registerRoutes();
         $this->registerViews();
-        $this->registerEvents();
+        $this->registerFormComponents();
     }
 
     /**
@@ -47,7 +43,7 @@ class ClassifiersServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                SetupCommand::class,
+                'InetStudio\Classifiers\Console\Commands\SetupCommand',
             ]);
         }
     }
@@ -94,25 +90,25 @@ class ClassifiersServiceProvider extends ServiceProvider
     }
 
     /**
-     * Регистрация событий.
-     *
-     * @return void
-     */
-    protected function registerEvents(): void
-    {
-        Event::listen(ModifyClassifierEvent::class, ClearClassifiersCacheListener::class);
-    }
-
-    /**
      * Регистрация привязок, алиасов и сторонних провайдеров сервисов.
      *
      * @return void
      */
     public function registerBindings(): void
     {
-        $this->app->bind('ClassifiersService', ClassifiersService::class);
+        $this->app->bind('ClassifiersService', 'InetStudio\Classifiers\Services\Front\ClassifiersService');
 
         // Services
         $this->app->bind('InetStudio\Classifiers\Contracts\Services\Back\ClassifiersServiceContract', 'InetStudio\Classifiers\Services\Back\ClassifiersService');
+    }
+
+    /**
+     * Регистрация компонентов форм.
+     *
+     * @return void
+     */
+    protected function registerFormComponents()
+    {
+        FormBuilder::component('classifiers', 'admin.module.classifiers::back.forms.fields.classifiers', ['name' => null, 'value' => null, 'attributes' => null]);
     }
 }
