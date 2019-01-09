@@ -2,7 +2,6 @@
 
 namespace InetStudio\Classifiers\Services\Front;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Collection;
 use InetStudio\Classifiers\Models\ClassifierModel;
 
@@ -22,25 +21,21 @@ class ClassifiersService
      */
     public function getClassifiers(string $type = '', string $value = '', string $alias = ''): Collection
     {
-        $cacheKey = 'ClassifiersService_getClassifiersByTypeOrValue_'.md5($type.'_'.$value.'_'.$alias);
+        $items = ClassifierModel::select(['id', 'type', 'value', 'alias']);
 
-        return Cache::tags(['classifiers'])->remember($cacheKey, 1440, function () use ($type, $value, $alias) {
-            $items = ClassifierModel::select(['id', 'type', 'value', 'alias']);
+        if ($type) {
+            $items = $items->where('type', $type);
+        }
 
-            if ($type) {
-                $items = $items->where('type', $type);
-            }
+        if ($value) {
+            $items = $items->where('value', $value);
+        }
 
-            if ($value) {
-                $items = $items->where('value', $value);
-            }
+        if ($alias) {
+            $items = $items->where('alias', $alias);
+        }
 
-            if ($alias) {
-                $items = $items->where('alias', $alias);
-            }
-
-            return $items->get();
-        });
+        return $items->get();
     }
 
     /**
