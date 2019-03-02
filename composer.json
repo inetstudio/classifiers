@@ -11,13 +11,19 @@
     ],
     "autoload": {
       "psr-4": {
-        "InetStudio\\Classifiers\\": "src/"
+        "InetStudio\\Classifiers\\": "package/src/",
+        "InetStudio\\Classifiers\\Entries\\": "entities/entries/src/",
+        "InetStudio\\Classifiers\\Groups\\": "entities/groups/src/"
       }
     },
     "extra": {
       "laravel": {
         "providers": [
-          "InetStudio\\Classifiers\\Providers\\ClassifiersServiceProvider"
+          "InetStudio\\Classifiers\\Providers\\ClassifiersServiceProvider",
+          "InetStudio\\Classifiers\\Entries\\Providers\\EntriesBindingsServiceProvider",
+          "InetStudio\\Classifiers\\Entries\\Providers\\EntriesServiceProvider",
+          "InetStudio\\Classifiers\\Groups\\Providers\\GroupsBindingsServiceProvider",
+          "InetStudio\\Classifiers\\Groups\\Providers\\GroupsServiceProvider"
         ]
       }
     }
