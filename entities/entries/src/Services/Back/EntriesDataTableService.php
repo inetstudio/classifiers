@@ -52,7 +52,7 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
         $query = $this->model->buildQuery([
             'columns' => ['created_at', 'updated_at'],
             'relations' => ['groups'],
-        ])->get();
+        ]);
 
         return $query;
     }
@@ -80,7 +80,7 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
     protected function getColumns(): array
     {
         return [
-            ['data' => 'groups', 'name' => 'groups', 'title' => 'Группы'],
+            ['data' => 'groups', 'name' => 'groups.name', 'title' => 'Группы'],
             ['data' => 'value', 'name' => 'value', 'title' => 'Значение'],
             ['data' => 'alias', 'name' => 'alias', 'title' => 'Алиас'],
             ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],

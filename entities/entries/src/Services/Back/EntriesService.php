@@ -2,6 +2,7 @@
 
 namespace InetStudio\Classifiers\Entries\Services\Back;
 
+use Illuminate\Http\Request;
 use League\Fractal\Manager;
 use Illuminate\Support\Facades\Session;
 use League\Fractal\Serializer\DataArraySerializer;
@@ -91,14 +92,20 @@ class EntriesService extends BaseService implements EntriesServiceContract
     /**
      * Присваиваем классификаторы объекту.
      *
-     * @param $request
+     * @param $classifiers
      *
      * @param $item
      */
-    public function attachToObject($request, $item)
+    public function attachToObject($classifiers, $item)
     {
-        if ($request->filled('classifiers')) {
-            $item->syncClassifiers($this->model::whereIn('id', (array) $request->get('classifiers'))->get());
+        if ($classifiers instanceof Request) {
+            $classifiers = $classifiers->get('classifiers', []);
+        } else {
+            $classifiers = (array) $classifiers;
+        }
+
+        if (! empty($classifiers)) {
+            $item->syncClassifiers($this->model::whereIn('id', $classifiers)->get());
         } else {
             $item->detachClassifiers($item->classifiers);
         }

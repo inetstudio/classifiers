@@ -110,8 +110,8 @@ class GroupModel extends Model implements GroupModelContract
         return $this->belongsToMany(
             app()->make('InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract'),
             'classifiers_groups_entries',
-            'group_id',
-            'entry_id'
+            'group_model_id',
+            'entry_model_id'
         );
     }
 }

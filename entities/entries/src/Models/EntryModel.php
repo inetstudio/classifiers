@@ -74,8 +74,8 @@ class EntryModel extends Model implements EntryModelContract
         return $this->belongsToMany(
             app()->make('InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract'),
             'classifiers_groups_entries',
-            'entry_id',
-            'group_id'
+            'entry_model_id',
+            'group_model_id'
         );
     }
 }
