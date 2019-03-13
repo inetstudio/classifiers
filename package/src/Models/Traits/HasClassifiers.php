@@ -159,7 +159,7 @@ trait HasClassifiers
      *
      * @return Builder
      */
-    public function scopeWithoutClassifiers(Builder $query, $classifiers, string $column = 'slug'): Builder
+    public function scopeWithoutClassifiers(Builder $query, $classifiers, string $column = 'alias'): Builder
     {
         $classifiers = static::isClassifiersStringBased($classifiers)
             ? $classifiers : static::hydrateClassifiers($classifiers)->pluck($column);
@@ -232,9 +232,9 @@ trait HasClassifiers
      */
     public function hasClassifier($classifiers): bool
     {
-        // Single Classifier slug
+        // Single Classifier alias
         if (is_string($classifiers)) {
-            return $this->classifiers->contains('slug', $classifiers);
+            return $this->classifiers->contains('alias', $classifiers);
         }
 
         // Single Classifier id
@@ -244,12 +244,12 @@ trait HasClassifiers
 
         // Single Classifier model
         if ($classifiers instanceof EntryModelContract) {
-            return $this->classifiers->contains('slug', $classifiers->slug);
+            return $this->classifiers->contains('alias', $classifiers->alias);
         }
 
-        // Array of Classifier slugs
+        // Array of Classifier aliases
         if (is_array($classifiers) && isset($classifiers[0]) && is_string($classifiers[0])) {
-            return ! $this->classifiers->pluck('slug')->intersect($classifiers)->isEmpty();
+            return ! $this->classifiers->pluck('alias')->intersect($classifiers)->isEmpty();
         }
 
         // Array of Classifier ids
@@ -259,7 +259,7 @@ trait HasClassifiers
 
         // Collection of Classifier models
         if ($classifiers instanceof Collection) {
-            return ! $classifiers->intersect($this->classifiers->pluck('slug'))->isEmpty();
+            return ! $classifiers->intersect($this->classifiers->pluck('alias'))->isEmpty();
         }
 
         return false;
@@ -286,9 +286,9 @@ trait HasClassifiers
      */
     public function hasAllClassifiers($classifiers): bool
     {
-        // Single Classifier slug
+        // Single Classifier alias
         if (is_string($classifiers)) {
-            return $this->classifiers->contains('slug', $classifiers);
+            return $this->classifiers->contains('alias', $classifiers);
         }
 
         // Single Classifier id
@@ -298,13 +298,13 @@ trait HasClassifiers
 
         // Single Classifier model
         if ($classifiers instanceof EntryModelContract) {
-            return $this->classifiers->contains('slug', $classifiers->slug);
+            return $this->classifiers->contains('alias', $classifiers->alias);
         }
 
-        // Array of Classifier slugs
+        // Array of Classifier aliases
         if (is_array($classifiers) && isset($classifiers[0]) && is_string($classifiers[0])) {
-            return $this->classifiers->pluck('slug')->count() === count($classifiers)
-                && $this->classifiers->pluck('slug')->diff($classifiers)->isEmpty();
+            return $this->classifiers->pluck('alias')->count() === count($classifiers)
+                && $this->classifiers->pluck('alias')->diff($classifiers)->isEmpty();
         }
 
         // Array of Classifier ids
@@ -358,7 +358,7 @@ trait HasClassifiers
     {
         $isClassifiersStringBased = static::isClassifiersStringBased($classifiers);
         $isClassifiersIntBased = static::isClassifiersIntBased($classifiers);
-        $field = $isClassifiersStringBased ? 'slug' : 'id';
+        $field = $isClassifiersStringBased ? 'alias' : 'id';
         $className = static::getClassifierClassName();
 
         return $isClassifiersStringBased || $isClassifiersIntBased
