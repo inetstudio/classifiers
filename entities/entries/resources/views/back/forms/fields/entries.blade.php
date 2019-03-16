@@ -5,9 +5,11 @@
 
     $values = $entriesService->getItemEntriesByGroup($item, $attributes['field']['group']);
 
-    if (empty($values) && isset($attributes['field']['default'])) {
-        $values = $entriesService->getEntriesValuesByAliases($attributes['field']['default']);
+    if ($values->count() == 0 && isset($attributes['field']['default'])) {
+        $values = $entriesService->getEntriesByAliases($attributes['field']['default']);
     }
+
+    $values = $values->pluck('value', 'id')->toArray();
 @endphp
 
 {!! Form::dropdown('classifiers[]', array_keys($values), [
@@ -23,6 +25,6 @@
        (isset($attributes['field']['readonly']) && $attributes['field']['readonly']) ? ['readonly' => 'readonly'] : []
     ),
     'options' => [
-        'values' => (old('classifiers')) ? $entriesService->getEntriesValuesByIDsAndGroup(old('classifiers'), $attributes['field']['group']) : $values,
+        'values' => (old('classifiers')) ? $entriesService->getEntriesByIDsAndGroup(old('classifiers'), $attributes['field']['group'])->pluck('value', 'id')->toArray() : $values,
     ],
 ]) !!}

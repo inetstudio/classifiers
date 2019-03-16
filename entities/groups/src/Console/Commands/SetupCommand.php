@@ -2,7 +2,7 @@
 
 namespace InetStudio\Classifiers\Groups\Console\Commands;
 
-use InetStudio\AdminPanel\Console\Commands\BaseSetupCommand;
+use InetStudio\AdminPanel\Base\Console\Commands\BaseSetupCommand;
 
 /**
  * Class SetupCommand.
@@ -21,7 +21,7 @@ class SetupCommand extends BaseSetupCommand
      *
      * @var string
      */
-    protected $description = 'Setup social contest groups package';
+    protected $description = 'Setup classifiers groups package';
 
     /**
      * Инициализация команд.

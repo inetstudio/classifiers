@@ -2,27 +2,18 @@
 
 namespace InetStudio\Classifiers\Entries\Services\Back;
 
-use Illuminate\Http\Request;
 use League\Fractal\Manager;
 use Illuminate\Support\Facades\Session;
 use League\Fractal\Serializer\DataArraySerializer;
-use InetStudio\AdminPanel\Base\Services\Back\BaseService;
 use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
 use InetStudio\Classifiers\Entries\Contracts\Services\Back\EntriesServiceContract;
+use InetStudio\Classifiers\Entries\Services\EntriesService as CommonEntriesService;
 
 /**
  * Class EntriesService.
  */
-class EntriesService extends BaseService implements EntriesServiceContract
+class EntriesService extends CommonEntriesService implements EntriesServiceContract
 {
-    /**
-     * EntriesService constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct(app()->make('InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract'));
-    }
-
     /**
      * Сохраняем модель.
      *
@@ -87,80 +78,5 @@ class EntriesService extends BaseService implements EntriesServiceContract
         }
 
         return $data;
-    }
-
-    /**
-     * Присваиваем классификаторы объекту.
-     *
-     * @param $classifiers
-     *
-     * @param $item
-     */
-    public function attachToObject($classifiers, $item)
-    {
-        if ($classifiers instanceof Request) {
-            $classifiers = $classifiers->get('classifiers', []);
-        } else {
-            $classifiers = (array) $classifiers;
-        }
-
-        if (! empty($classifiers)) {
-            $item->syncClassifiers($this->model::whereIn('id', $classifiers)->get());
-        } else {
-            $item->detachClassifiers($item->classifiers);
-        }
-    }
-
-    /**
-     * Возвращаем значения классификаторов объекта по группе.
-     *
-     * @param $item
-     * @param string $group
-     *
-     * @return array
-     */
-    public function getItemEntriesByGroup($item, string $group): array
-    {
-        $values = $item->classifiers()->whereHas('groups', function ($query) use ($group) {
-            $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-        })->pluck('classifiers_entries.value', 'classifiers_entries.id')->toArray();
-
-        return $values;
-    }
-
-    /**
-     * Возвращаем значения классификаторов для выпадающего списка по массиву алиасов.
-     *
-     * @param $aliases
-     *
-     * @return array
-     */
-    public function getEntriesValuesByAliases($aliases): array
-    {
-        $values = $this->model::whereIn('alias', (array) $aliases)
-            ->pluck('classifiers_entries.value', 'classifiers_entries.id')
-            ->toArray();
-
-        return $values;
-    }
-
-    /**
-     * Возвращаем значения классификаторов для выпадающего списка по массиву id и группе.
-     *
-     * @param $ids
-     * @param string $group
-     *
-     * @return array
-     */
-    public function getEntriesValuesByIDsAndGroup($ids, string $group): array
-    {
-        $values = $this->model::whereIn('id', (array) $ids)
-            ->whereHas('groups', function ($query) use ($group) {
-                $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-            })
-            ->pluck('classifiers_entries.value', 'classifiers_entries.id')
-            ->toArray();
-
-        return $values;
     }
 }

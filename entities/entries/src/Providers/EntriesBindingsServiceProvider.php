@@ -35,6 +35,7 @@ class EntriesBindingsServiceProvider extends ServiceProvider
         'InetStudio\Classifiers\Entries\Contracts\Services\Back\EntriesServiceContract' => 'InetStudio\Classifiers\Entries\Services\Back\EntriesService',
         'InetStudio\Classifiers\Entries\Contracts\Services\Back\EntriesDataTableServiceContract' => 'InetStudio\Classifiers\Entries\Services\Back\EntriesDataTableService',
         'InetStudio\Classifiers\Entries\Contracts\Services\Front\EntriesServiceContract' => 'InetStudio\Classifiers\Entries\Services\Front\EntriesService',
+        'InetStudio\Classifiers\Entries\Contracts\Services\EntriesServiceContract' => 'InetStudio\Classifiers\Entries\Services\EntriesService',
     ];
 
     /**
