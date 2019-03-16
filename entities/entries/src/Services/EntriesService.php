@@ -70,7 +70,7 @@ class EntriesService extends BaseService implements EntriesServiceContract
     {
         $values = $this->model::whereHas('groups', function ($query) use ($group) {
             $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-        })->pluck('classifiers_entries.value', 'classifiers_entries.id')->toArray();
+        })->get();
 
         return $values;
     }
