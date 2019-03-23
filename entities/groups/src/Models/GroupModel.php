@@ -3,23 +3,28 @@
 namespace InetStudio\Classifiers\Groups\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Venturecraft\Revisionable\RevisionableTrait;
 use InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract;
 use InetStudio\AdminPanel\Base\Models\Traits\Scopes\BuildQueryScopeTrait;
 
 /**
  * Class GroupModel.
  */
-class GroupModel extends Model implements GroupModelContract
+class GroupModel extends Model implements GroupModelContract, Auditable
 {
     use SoftDeletes;
-    use RevisionableTrait;
+    use \OwenIt\Auditing\Auditable;
     use BuildQueryScopeTrait;
 
     const MATERIAL_TYPE = 'classifiers_group';
 
-    protected $revisionCreationsEnabled = true;
+    /**
+     * Should the timestamps be audited?
+     *
+     * @var bool
+     */
+    protected $auditTimestamps = true;
 
     /**
      * Связанная с моделью таблица.
