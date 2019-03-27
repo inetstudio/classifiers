@@ -34,7 +34,7 @@ class GroupsController extends Controller implements GroupsControllerContract
     }
 
     /**
-     * Добавление объекта.
+     * Создание объекта.
      *
      * @param GroupsServiceContract $groupsService
      *

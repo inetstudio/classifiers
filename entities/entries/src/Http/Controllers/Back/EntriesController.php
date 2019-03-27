@@ -34,7 +34,7 @@ class EntriesController extends Controller implements EntriesControllerContract
     }
 
     /**
-     * Добавление объекта.
+     * Создание объекта.
      *
      * @param EntriesServiceContract $entriesService
      * 
