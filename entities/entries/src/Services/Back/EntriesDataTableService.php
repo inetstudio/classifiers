@@ -34,7 +34,7 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
      */
     public function ajax()
     {
-        $transformer = app()->make('InetStudio\Classifiers\Entries\Contracts\Transformers\Back\EntryTransformerContract');
+        $transformer = app()->make('InetStudio\Classifiers\Entries\Contracts\Transformers\Back\Resource\IndexTransformerContract');
 
         return DataTables::of($this->query())
             ->setTransformer($transformer)

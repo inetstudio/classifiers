@@ -16,7 +16,7 @@ class EntriesBindingsServiceProvider extends ServiceProvider implements Deferrab
     public $bindings = [
         'InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract' => 'InetStudio\Classifiers\Entries\Models\EntryModel',
         'InetStudio\Classifiers\Entries\Contracts\Transformers\Back\SuggestionTransformerContract' => 'InetStudio\Classifiers\Entries\Transformers\Back\SuggestionTransformer',
-        'InetStudio\Classifiers\Entries\Contracts\Transformers\Back\EntryTransformerContract' => 'InetStudio\Classifiers\Entries\Transformers\Back\EntryTransformer',
+        'InetStudio\Classifiers\Entries\Contracts\Transformers\Back\Resource\IndexTransformerContract' => 'InetStudio\Classifiers\Entries\Transformers\Back\Resource\IndexTransformer',
         'InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\DestroyResponseContract' => 'InetStudio\Classifiers\Entries\Http\Responses\Back\Resource\DestroyResponse',
         'InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\SaveResponseContract' => 'InetStudio\Classifiers\Entries\Http\Responses\Back\Resource\SaveResponse',
         'InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\ShowResponseContract' => 'InetStudio\Classifiers\Entries\Http\Responses\Back\Resource\ShowResponse',
