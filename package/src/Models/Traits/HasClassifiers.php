@@ -266,34 +266,31 @@ trait HasClassifiers
      */
     public function hasClassifier($classifiers): bool
     {
-        // Single Classifier alias
-        if (is_string($classifiers)) {
-            return $this->classifiers->contains('alias', $classifiers);
-        }
+        switch (gettype($classifiers)) {
+            case 'string':
+                return $this->classifiers->contains('alias', $classifiers);
 
-        // Single Classifier id
-        if (is_int($classifiers)) {
-            return $this->classifiers->contains('id', $classifiers);
-        }
+                break;
+            case 'integer':
+                return $this->classifiers->contains('id', $classifiers);
 
-        // Single Classifier model
-        if ($classifiers instanceof EntryModelContract) {
-            return $this->classifiers->contains('alias', $classifiers['alias']);
-        }
+                break;
+            case 'array':
+                if (isset($classifiers[0]) && is_string($classifiers[0])) {
+                    return ! $this->classifiers->pluck('alias')->intersect($classifiers)->isEmpty();
+                } elseif (isset($classifiers[0]) && is_int($classifiers[0])) {
+                    return ! $this->classifiers->pluck('id')->intersect($classifiers)->isEmpty();
+                }
 
-        // Array of Classifier aliases
-        if (is_array($classifiers) && isset($classifiers[0]) && is_string($classifiers[0])) {
-            return ! $this->classifiers->pluck('alias')->intersect($classifiers)->isEmpty();
-        }
+                break;
+            case 'object':
+                if ($classifiers instanceof EntryModelContract) {
+                    return $this->classifiers->contains('alias', $classifiers['alias']);
+                } elseif ($classifiers instanceof Collection) {
+                    return ! $classifiers->intersect($this->classifiers->pluck('alias'))->isEmpty();
+                }
 
-        // Array of Classifier ids
-        if (is_array($classifiers) && isset($classifiers[0]) && is_int($classifiers[0])) {
-            return ! $this->classifiers->pluck('id')->intersect($classifiers)->isEmpty();
-        }
-
-        // Collection of Classifier models
-        if ($classifiers instanceof Collection) {
-            return ! $classifiers->intersect($this->classifiers->pluck('alias'))->isEmpty();
+                break;
         }
 
         return false;
@@ -374,13 +371,13 @@ trait HasClassifiers
         $classifiers = $this->hydrateClassifiers($classifiers)->pluck('id')->toArray();
 
         // Fire the Classifier syncing event
-        static::$dispatcher->dispatch("inetstudio.classifiers.entries.{$event}ing", [$this, $classifiers]);
+        static::$dispatcher->dispatch('inetstudio.classifiers.entries.'.$event.'ing', [$this, $classifiers]);
 
         // Set Classifiers
         $this->classifiers()->$action($classifiers);
 
         // Fire the Classifier synced event
-        static::$dispatcher->dispatch("inetstudio.classifiers.entries.{$event}ed", [$this, $classifiers]);
+        static::$dispatcher->dispatch('inetstudio.classifiers.entries.'.$event.'ed', [$this, $classifiers]);
     }
 
     /**
