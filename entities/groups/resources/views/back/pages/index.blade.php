@@ -17,7 +17,8 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <a href="{{ route('back.classifiers.groups.create') }}" class="btn btn-primary btn-sm">Добавить</a>
+                        <a href="{{ route('back.classifiers.groups.create') }}"
+                           class="btn btn-primary btn-sm">Добавить</a>
                     </div>
                     <div class="ibox-content">
                         <div class="table-responsive">
@@ -31,5 +32,5 @@
 @endsection
 
 @pushonce('scripts:datatables_groups_index')
-    {!! $table->scripts() !!}
+{!! $table->scripts() !!}
 @endpushonce

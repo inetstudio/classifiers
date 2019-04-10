@@ -20,53 +20,59 @@ class EntriesController extends Controller implements EntriesControllerContract
     /**
      * Список объектов.
      *
-     * @param EntriesDataTableServiceContract $datatablesService
-     * 
+     * @param  EntriesDataTableServiceContract  $datatablesService
+     *
      * @return IndexResponseContract
      */
     public function index(EntriesDataTableServiceContract $datatablesService): IndexResponseContract
     {
         $table = $datatablesService->html();
 
-        return app()->makeWith(IndexResponseContract::class, [
+        return app()->makeWith(
+            IndexResponseContract::class, [
             'data' => compact('table'),
-        ]);
+        ]
+        );
     }
 
     /**
      * Создание объекта.
      *
-     * @param EntriesServiceContract $entriesService
-     * 
+     * @param  EntriesServiceContract  $entriesService
+     *
      * @return FormResponseContract
      */
     public function create(EntriesServiceContract $entriesService): FormResponseContract
     {
         $item = $entriesService->getItemByID();
 
-        return app()->makeWith(FormResponseContract::class, [
+        return app()->makeWith(
+            FormResponseContract::class, [
             'data' => compact('item'),
-        ]);
+        ]
+        );
     }
 
     /**
      * Создание объекта.
      *
-     * @param EntriesServiceContract $entriesService
-     * @param SaveEntryRequestContract $request
+     * @param  EntriesServiceContract  $entriesService
+     * @param  SaveEntryRequestContract  $request
      *
      * @return SaveResponseContract
      */
-    public function store(EntriesServiceContract $entriesService, SaveEntryRequestContract $request): SaveResponseContract
-    {
+    public function store(
+        EntriesServiceContract $entriesService,
+        SaveEntryRequestContract $request
+    ): SaveResponseContract {
         return $this->save($entriesService, $request);
     }
 
     /**
      * Редактирование объекта.
      *
-     * @param EntriesServiceContract $entriesService
-     * @param int $id
+     * @param  EntriesServiceContract  $entriesService
+     * @param  int  $id
      *
      * @return FormResponseContract
      */
@@ -74,51 +80,61 @@ class EntriesController extends Controller implements EntriesControllerContract
     {
         $item = $entriesService->getItemByID($id);
 
-        return app()->makeWith(FormResponseContract::class, [
+        return app()->makeWith(
+            FormResponseContract::class, [
             'data' => compact('item'),
-        ]);
+        ]
+        );
     }
 
     /**
      * Обновление объекта.
      *
-     * @param EntriesServiceContract $entriesService
-     * @param SaveEntryRequestContract $request
-     * @param int $id
+     * @param  EntriesServiceContract  $entriesService
+     * @param  SaveEntryRequestContract  $request
+     * @param  int  $id
      *
      * @return SaveResponseContract
      */
-    public function update(EntriesServiceContract $entriesService, SaveEntryRequestContract $request, int $id = 0): SaveResponseContract
-    {
+    public function update(
+        EntriesServiceContract $entriesService,
+        SaveEntryRequestContract $request,
+        int $id = 0
+    ): SaveResponseContract {
         return $this->save($entriesService, $request, $id);
     }
 
     /**
      * Сохранение объекта.
      *
-     * @param EntriesServiceContract $entriesService
-     * @param SaveEntryRequestContract $request
-     * @param int $id
+     * @param  EntriesServiceContract  $entriesService
+     * @param  SaveEntryRequestContract  $request
+     * @param  int  $id
      *
      * @return SaveResponseContract
      */
-    protected function save(EntriesServiceContract $entriesService, SaveEntryRequestContract $request, int $id = 0): SaveResponseContract
-    {
+    protected function save(
+        EntriesServiceContract $entriesService,
+        SaveEntryRequestContract $request,
+        int $id = 0
+    ): SaveResponseContract {
         $data = $request->only($entriesService->model->getFillable());
         $data['groups'] = $request->get('groups') ?? [];
 
         $item = $entriesService->save($data, $id);
 
-        return app()->makeWith(SaveResponseContract::class, [
+        return app()->makeWith(
+            SaveResponseContract::class, [
             'item' => $item,
-        ]);
+        ]
+        );
     }
 
     /**
      * Удаление объекта.
      *
-     * @param EntriesServiceContract $entriesService
-     * @param int $id
+     * @param  EntriesServiceContract  $entriesService
+     * @param  int  $id
      *
      * @return DestroyResponseContract
      */
@@ -126,8 +142,10 @@ class EntriesController extends Controller implements EntriesControllerContract
     {
         $result = $entriesService->destroy($id);
 
-        return app()->makeWith(DestroyResponseContract::class, [
+        return app()->makeWith(
+            DestroyResponseContract::class, [
             'result' => ($result === null) ? false : $result,
-        ]);
+        ]
+        );
     }
 }

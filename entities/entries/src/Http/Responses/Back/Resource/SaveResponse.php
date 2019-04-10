@@ -20,7 +20,7 @@ class SaveResponse implements SaveResponseContract, Responsable
     /**
      * SaveResponse constructor.
      *
-     * @param EntryModelContract $item
+     * @param  EntryModelContract  $item
      */
     public function __construct(EntryModelContract $item)
     {
@@ -30,14 +30,16 @@ class SaveResponse implements SaveResponseContract, Responsable
     /**
      * Возвращаем ответ при сохранении объекта.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return RedirectResponse
      */
     public function toResponse($request): RedirectResponse
     {
-        return response()->redirectToRoute('back.classifiers.entries.edit', [
+        return response()->redirectToRoute(
+            'back.classifiers.entries.edit', [
             $this->item->fresh()->id,
-        ]);
+        ]
+        );
     }
 }

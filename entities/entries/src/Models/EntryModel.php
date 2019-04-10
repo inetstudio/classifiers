@@ -37,7 +37,8 @@ class EntryModel extends Model implements EntryModelContract, Auditable
      * @var array
      */
     protected $fillable = [
-        'value', 'alias',
+        'value',
+        'alias',
     ];
 
     /**
@@ -53,15 +54,15 @@ class EntryModel extends Model implements EntryModelContract, Auditable
 
     /**
      * Загрузка модели.
-     *
-     * @return void
      */
     protected static function boot()
     {
         parent::boot();
 
         self::$buildQueryScopeDefaults['columns'] = [
-            'id', 'value', 'alias',
+            'id',
+            'value',
+            'alias',
         ];
 
         self::$buildQueryScopeDefaults['relations'] = [

@@ -30,7 +30,7 @@ class SuggestionTransformer extends TransformerAbstract implements SuggestionTra
     /**
      * Подготовка данных для отображения в выпадающих списках.
      *
-     * @param EntryModelContract $item
+     * @param  EntryModelContract  $item
      *
      * @return array
      *

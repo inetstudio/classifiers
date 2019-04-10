@@ -15,7 +15,7 @@ class IndexTransformer extends TransformerAbstract implements IndexTransformerCo
     /**
      * Подготовка данных для отображения в таблице.
      *
-     * @param EntryModelContract $item
+     * @param  EntryModelContract  $item
      *
      * @return array
      *
@@ -24,16 +24,20 @@ class IndexTransformer extends TransformerAbstract implements IndexTransformerCo
     public function transform(EntryModelContract $item): array
     {
         return [
-            'groups' => view('admin.module.classifiers.entries::back.partials.datatables.groups', [
+            'groups' => view(
+                'admin.module.classifiers.entries::back.partials.datatables.groups', [
                 'groups' => $item['groups'],
-            ])->render(),
+            ]
+            )->render(),
             'value' => $item['value'],
             'alias' => $item['alias'],
             'created_at' => (string) $item['created_at'],
             'updated_at' => (string) $item['updated_at'],
-            'actions' => view('admin.module.classifiers.entries::back.partials.datatables.actions', [
+            'actions' => view(
+                'admin.module.classifiers.entries::back.partials.datatables.actions', [
                 'id' => $item['id'],
-            ])->render(),
+            ]
+            )->render(),
         ];
     }
 }

@@ -20,7 +20,7 @@ class ShowResponse implements ShowResponseContract, Responsable
     /**
      * ShowResponse constructor.
      *
-     * @param EntryModelContract $item
+     * @param  EntryModelContract  $item
      */
     public function __construct(EntryModelContract $item)
     {
@@ -30,7 +30,7 @@ class ShowResponse implements ShowResponseContract, Responsable
     /**
      * Возвращаем ответ при получении объекта.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return JsonResponse
      */

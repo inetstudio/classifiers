@@ -16,21 +16,26 @@ class EntriesUtilityController extends Controller implements EntriesUtilityContr
     /**
      * Возвращаем значения для поля.
      *
-     * @param EntriesServiceContract $entriesService
-     * @param Request $request
-     * @param string $group
+     * @param  EntriesServiceContract  $entriesService
+     * @param  Request  $request
+     * @param  string  $group
      *
      * @return SuggestionsResponseContract
      */
-    public function getSuggestions(EntriesServiceContract $entriesService, Request $request, string $group = ''): SuggestionsResponseContract
-    {
+    public function getSuggestions(
+        EntriesServiceContract $entriesService,
+        Request $request,
+        string $group = ''
+    ): SuggestionsResponseContract {
         $search = $request->get('q');
         $type = $request->get('type');
 
         $data = $entriesService->getSuggestions($search, $type, $group);
 
-        return app()->makeWith('InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract', [
+        return app()->makeWith(
+            'InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract', [
             'suggestions' => $data,
-        ]);
+        ]
+        );
     }
 }

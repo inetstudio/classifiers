@@ -13,8 +13,6 @@ class EntriesServiceProvider extends ServiceProvider
 {
     /**
      * Загрузка сервиса.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -27,39 +25,39 @@ class EntriesServiceProvider extends ServiceProvider
 
     /**
      * Регистрация команд.
-     *
-     * @return void
      */
     protected function registerConsoleCommands(): void
     {
         if ($this->app->runningInConsole()) {
-            $this->commands([
-                'InetStudio\Classifiers\Entries\Console\Commands\SetupCommand',
-            ]);
+            $this->commands(
+                [
+                    'InetStudio\Classifiers\Entries\Console\Commands\SetupCommand',
+                ]
+            );
         }
     }
 
     /**
      * Регистрация ресурсов.
-     *
-     * @return void
      */
     protected function registerPublishes(): void
     {
         if ($this->app->runningInConsole()) {
             if (! Schema::hasTable('classifiers_entries')) {
                 $timestamp = date('Y_m_d_His', time());
-                $this->publishes([
-                    __DIR__.'/../../database/migrations/create_classifiers_entries_tables.php.stub' => database_path('migrations/'.$timestamp.'_create_classifiers_entries_tables.php'),
-                ], 'migrations');
+                $this->publishes(
+                    [
+                        __DIR__.'/../../database/migrations/create_classifiers_entries_tables.php.stub' => database_path(
+                            'migrations/'.$timestamp.'_create_classifiers_entries_tables.php'
+                        ),
+                    ], 'migrations'
+                );
             }
         }
     }
 
     /**
      * Регистрация путей.
-     *
-     * @return void
      */
     protected function registerRoutes(): void
     {
@@ -68,8 +66,6 @@ class EntriesServiceProvider extends ServiceProvider
 
     /**
      * Регистрация представлений.
-     *
-     * @return void
      */
     protected function registerViews(): void
     {
@@ -78,11 +74,12 @@ class EntriesServiceProvider extends ServiceProvider
 
     /**
      * Регистрация компонентов форм.
-     *
-     * @return void
      */
     protected function registerFormComponents()
     {
-        FormBuilder::component('classifiers', 'admin.module.classifiers.entries::back.forms.fields.entries', ['name' => null, 'value' => null, 'attributes' => null]);
+        FormBuilder::component(
+            'classifiers', 'admin.module.classifiers.entries::back.forms.fields.entries',
+            ['name' => null, 'value' => null, 'attributes' => null]
+        );
     }
 }

@@ -34,7 +34,9 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
      */
     public function ajax()
     {
-        $transformer = app()->make('InetStudio\Classifiers\Entries\Contracts\Transformers\Back\Resource\IndexTransformerContract');
+        $transformer = app()->make(
+            'InetStudio\Classifiers\Entries\Contracts\Transformers\Back\Resource\IndexTransformerContract'
+        );
 
         return DataTables::of($this->query())
             ->setTransformer($transformer)
@@ -49,10 +51,12 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
      */
     public function query()
     {
-        $query = $this->model->buildQuery([
-            'columns' => ['created_at', 'updated_at'],
-            'relations' => ['groups'],
-        ]);
+        $query = $this->model->buildQuery(
+            [
+                'columns' => ['created_at', 'updated_at'],
+                'relations' => ['groups'],
+            ]
+        );
 
         return $query;
     }
@@ -85,7 +89,13 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
             ['data' => 'alias', 'name' => 'alias', 'title' => 'Алиас'],
             ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
             ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
-            ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
+            [
+                'data' => 'actions',
+                'name' => 'actions',
+                'title' => 'Действия',
+                'orderable' => false,
+                'searchable' => false
+            ],
         ];
     }
 

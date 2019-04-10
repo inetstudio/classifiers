@@ -42,7 +42,7 @@ class SaveEntryRequest extends FormRequest implements SaveEntryRequestContract
     /**
      * Правила проверки запроса.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return array
      */

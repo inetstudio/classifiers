@@ -2,16 +2,18 @@
 
 namespace InetStudio\Classifiers\Groups\Services\Back;
 
+use Exception;
 use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Services\DataTable;
-use InetStudio\Classifiers\Groups\Contracts\Repositories\GroupsRepositoryContract;
-use InetStudio\Classifiers\Groups\Contracts\Services\Back\GroupsDataTableServiceContract;
+use InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract;
+use InetStudio\Classifiers\Groups\Contracts\Services\Back\DataTableServiceContract;
 
 /**
- * Class GroupsDataTableService.
+ * Class DataTableService.
  */
-class GroupsDataTableService extends DataTable implements GroupsDataTableServiceContract
+class DataTableService extends DataTable implements DataTableServiceContract
 {
     /**
      * @var
@@ -19,23 +21,27 @@ class GroupsDataTableService extends DataTable implements GroupsDataTableService
     public $model;
 
     /**
-     * CommentsDataTableService constructor.
+     * DataTableService constructor.
+     *
+     * @param  GroupModelContract  $model
      */
-    public function __construct()
+    public function __construct(GroupModelContract $model)
     {
-        $this->model = app()->make('InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract');
+        $this->model = $model;
     }
 
     /**
      * Запрос на получение данных таблицы.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function ajax()
+    public function ajax(): JsonResponse
     {
-        $transformer = app()->make('InetStudio\Classifiers\Groups\Contracts\Transformers\Back\GroupTransformerContract');
+        $transformer = app()->make(
+            'InetStudio\Classifiers\Groups\Contracts\Transformers\Back\Resource\IndexTransformerContract'
+        );
 
         return DataTables::of($this->query())
             ->setTransformer($transformer)
@@ -50,9 +56,11 @@ class GroupsDataTableService extends DataTable implements GroupsDataTableService
      */
     public function query()
     {
-        $query = $this->model->buildQuery([
-            'columns' => ['created_at', 'updated_at']
-        ]);
+        $query = $this->model->buildQuery(
+            [
+                'columns' => ['created_at', 'updated_at']
+            ]
+        );
 
         return $query;
     }
@@ -60,10 +68,11 @@ class GroupsDataTableService extends DataTable implements GroupsDataTableService
     /**
      * Optional method if you want to use html builder.
      *
-     * @return \Yajra\DataTables\Html\Builder
+     * @return Builder
      */
     public function html(): Builder
     {
+        /** @var Builder $table */
         $table = app('datatables.html');
 
         return $table
@@ -84,7 +93,13 @@ class GroupsDataTableService extends DataTable implements GroupsDataTableService
             ['data' => 'alias', 'name' => 'alias', 'title' => 'Алиас'],
             ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
             ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
-            ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
+            [
+                'data' => 'actions',
+                'name' => 'actions',
+                'title' => 'Действия',
+                'orderable' => false,
+                'searchable' => false,
+            ],
         ];
     }
 
@@ -108,7 +123,7 @@ class GroupsDataTableService extends DataTable implements GroupsDataTableService
      */
     protected function getParameters(): array
     {
-        $i18n = trans('admin::datatables');
+        $translation = trans('admin::datatables');
 
         return [
             'paging' => true,
@@ -116,7 +131,7 @@ class GroupsDataTableService extends DataTable implements GroupsDataTableService
             'searching' => true,
             'info' => false,
             'searchDelay' => 350,
-            'language' => $i18n,
+            'language' => $translation,
         ];
     }
 }

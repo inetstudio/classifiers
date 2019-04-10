@@ -5,28 +5,30 @@ namespace InetStudio\Classifiers\Groups\Services\Back;
 use League\Fractal\Manager;
 use Illuminate\Support\Facades\Session;
 use League\Fractal\Serializer\DataArraySerializer;
-use InetStudio\AdminPanel\Base\Services\Back\BaseService;
+use InetStudio\AdminPanel\Base\Services\BaseService;
 use InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract;
-use InetStudio\Classifiers\Groups\Contracts\Services\Back\GroupsServiceContract;
+use InetStudio\Classifiers\Groups\Contracts\Services\Back\ItemsServiceContract;
 
 /**
- * Class GroupsService.
+ * Class ItemsService.
  */
-class GroupsService extends BaseService implements GroupsServiceContract
+class ItemsService extends BaseService implements ItemsServiceContract
 {
     /**
-     * GroupsService constructor.
+     * ItemsService constructor.
+     *
+     * @param  GroupModelContract  $model
      */
-    public function __construct()
+    public function __construct(GroupModelContract $model)
     {
-        parent::__construct(app()->make('InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract'));
+        parent::__construct($model);
     }
 
     /**
      * Сохраняем модель.
      *
-     * @param array $data
-     * @param int $id
+     * @param  array  $data
+     * @param  int  $id
      *
      * @return GroupModelContract
      */
@@ -36,9 +38,12 @@ class GroupsService extends BaseService implements GroupsServiceContract
 
         $item = $this->saveModel($data, $id);
 
-        event(app()->makeWith('InetStudio\Classifiers\Groups\Contracts\Events\Back\ModifyGroupEventContract', [
-            'object' => $item,
-        ]));
+        event(
+            app()->makeWith(
+                'InetStudio\Classifiers\Groups\Contracts\Events\Back\ModifyItemEventContract',
+                compact('item')
+            )
+        );
 
         Session::flash('success', 'Группа «'.$item->name.'» успешно '.$action);
 
@@ -48,7 +53,7 @@ class GroupsService extends BaseService implements GroupsServiceContract
     /**
      * Получаем подсказки.
      *
-     * @param string $search
+     * @param  string  $search
      * @param $type
      *
      * @return array
@@ -57,9 +62,11 @@ class GroupsService extends BaseService implements GroupsServiceContract
     {
         $items = $this->model::where([['name', 'LIKE', '%'.$search.'%']])->get();
 
-        $resource = (app()->makeWith('InetStudio\Classifiers\Groups\Contracts\Transformers\Back\SuggestionTransformerContract', [
-            'type' => $type,
-        ]))->transformCollection($items);
+        $resource = (app()->makeWith(
+            'InetStudio\Classifiers\Groups\Contracts\Transformers\Back\SuggestionTransformerContract', [
+                                                                                                         'type' => $type,
+                                                                                                     ]
+        ))->transformCollection($items);
 
         $manager = new Manager();
         $manager->setSerializer(new DataArraySerializer());
@@ -78,13 +85,13 @@ class GroupsService extends BaseService implements GroupsServiceContract
     /**
      * Присваиваем группы объекту.
      *
-     * @param $groups
+     * @param $groupsIds
      *
      * @param $item
      */
-    public function attachToObject($groups, $item)
+    public function attachToObject($groupsIds, $item)
     {
-        $groupsIDs = $groups ?? [];
+        $groupsIDs = $groupsIds ?? [];
 
         $item->groups()->sync($groupsIDs);
     }

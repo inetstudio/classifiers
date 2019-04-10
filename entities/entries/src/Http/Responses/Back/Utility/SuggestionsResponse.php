@@ -19,7 +19,7 @@ class SuggestionsResponse implements SuggestionsResponseContract, Responsable
     /**
      * SuggestionsResponse constructor.
      *
-     * @param array $suggestions
+     * @param  array  $suggestions
      */
     public function __construct(array $suggestions)
     {
@@ -29,7 +29,7 @@ class SuggestionsResponse implements SuggestionsResponseContract, Responsable
     /**
      * Возвращаем подсказки.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return JsonResponse
      */

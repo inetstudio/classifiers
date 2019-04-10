@@ -25,65 +25,66 @@
 
         {!! Form::open(['url' => (! $item->id) ? route('back.classifiers.groups.store') : route('back.classifiers.groups.update', [$item->id]), 'id' => 'mainForm', 'enctype' => 'multipart/form-data']) !!}
 
-            @if ($item->id)
-                {{ method_field('PUT') }}
-            @endif
-    
-            {!! Form::hidden('group_id', (! $item->id) ? '' : $item->id, ['id' => 'object-id']) !!}
-    
-            {!! Form::hidden('group_type', get_class($item), ['id' => 'object-type']) !!}
+        @if ($item->id)
+            {{ method_field('PUT') }}
+        @endif
 
-            <div class="ibox">
-                <div class="ibox-title">
-                    {!! Form::buttons('', '', ['back' => 'back.classifiers.groups.index']) !!}
-                </div>
-                <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel-group float-e-margins" id="mainAccordion">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h5 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#mainAccordion" href="#collapseMain" aria-expanded="true">Основная информация</a>
-                                        </h5>
-                                    </div>
-                                    <div id="collapseMain" class="collapse show" aria-expanded="true">
-                                        <div class="panel-body">
+        {!! Form::hidden('group_id', (! $item->id) ? '' : $item->id, ['id' => 'object-id']) !!}
 
-                                            {!! Form::string('name', $item->name, [
-                                                'label' => [
-                                                    'title' => 'Название',
-                                                ],
-                                            ]) !!}
+        {!! Form::hidden('group_type', get_class($item), ['id' => 'object-type']) !!}
 
-                                            {!! Form::string('alias', $item->alias, [
-                                                'label' => [
-                                                    'title' => 'Алиас',
-                                                ],
-                                            ]) !!}
+        <div class="ibox">
+            <div class="ibox-title">
+                {!! Form::buttons('', '', ['back' => 'back.classifiers.groups.index']) !!}
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel-group float-e-margins" id="mainAccordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#mainAccordion" href="#collapseMain"
+                                           aria-expanded="true">Основная информация</a>
+                                    </h5>
+                                </div>
+                                <div id="collapseMain" class="collapse show" aria-expanded="true">
+                                    <div class="panel-body">
 
-                                            {!! Form::wysiwyg('description', $item->description, [
-                                                'label' => [
-                                                    'title' => 'Описание',
-                                                ],
-                                                'field' => [
-                                                    'class' => 'tinymce',
-                                                    'id' => 'description',
-                                                    'hasImages' => false,
-                                                ],
-                                            ]) !!}
+                                        {!! Form::string('name', $item->name, [
+                                            'label' => [
+                                                'title' => 'Название',
+                                            ],
+                                        ]) !!}
 
-                                        </div>
+                                        {!! Form::string('alias', $item->alias, [
+                                            'label' => [
+                                                'title' => 'Алиас',
+                                            ],
+                                        ]) !!}
+
+                                        {!! Form::wysiwyg('description', $item->description, [
+                                            'label' => [
+                                                'title' => 'Описание',
+                                            ],
+                                            'field' => [
+                                                'class' => 'tinymce',
+                                                'id' => 'description',
+                                                'hasImages' => false,
+                                            ],
+                                        ]) !!}
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="ibox-footer">
-                    {!! Form::buttons('', '', ['back' => 'back.classifiers.groups.index']) !!}
-                </div>
             </div>
+            <div class="ibox-footer">
+                {!! Form::buttons('', '', ['back' => 'back.classifiers.groups.index']) !!}
+            </div>
+        </div>
 
         {!! Form::close()!!}
 

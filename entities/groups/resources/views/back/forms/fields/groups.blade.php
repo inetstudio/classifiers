@@ -1,4 +1,4 @@
-@inject('groupsService', 'InetStudio\Classifiers\Groups\Contracts\Services\Back\GroupsServiceContract')
+@inject('groupsService', 'InetStudio\Classifiers\Groups\Contracts\Services\Back\ItemsServiceContract')
 
 @php
     $item = $value;

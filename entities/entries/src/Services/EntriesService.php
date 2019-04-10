@@ -46,15 +46,17 @@ class EntriesService extends BaseService implements EntriesServiceContract
      * Возвращаем значения классификаторов объекта по группе.
      *
      * @param $item
-     * @param string $group
+     * @param  string  $group
      *
      * @return Collection
      */
     public function getItemEntriesByGroup($item, string $group): Collection
     {
-        $values = $item->classifiers()->whereHas('groups', function ($query) use ($group) {
+        $values = $item->classifiers()->whereHas(
+            'groups', function ($query) use ($group) {
             $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-        })->get();
+        }
+        )->get();
 
         return $values;
     }
@@ -62,15 +64,17 @@ class EntriesService extends BaseService implements EntriesServiceContract
     /**
      * Возвращаем значения классификаторов по группе.
      *
-     * @param string $group
+     * @param  string  $group
      *
      * @return Collection
      */
     public function getEntriesByGroup(string $group): Collection
     {
-        $values = $this->model::whereHas('groups', function ($query) use ($group) {
+        $values = $this->model::whereHas(
+            'groups', function ($query) use ($group) {
             $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-        })->get();
+        }
+        )->get();
 
         return $values;
     }
@@ -93,16 +97,18 @@ class EntriesService extends BaseService implements EntriesServiceContract
      * Возвращаем значения классификаторов для выпадающего списка по массиву id и группе.
      *
      * @param $ids
-     * @param string $group
+     * @param  string  $group
      *
      * @return Collection
      */
     public function getEntriesByIDsAndGroup($ids, string $group): Collection
     {
         $values = $this->model::whereIn('id', (array) $ids)
-            ->whereHas('groups', function ($query) use ($group) {
+            ->whereHas(
+                'groups', function ($query) use ($group) {
                 $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-            })
+            }
+            )
             ->get();
 
         return $values;

@@ -2,7 +2,7 @@
 
 namespace InetStudio\Classifiers\Groups\Http\Responses\Back\Resource;
 
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Responsable;
 use InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract;
 use InetStudio\Classifiers\Groups\Contracts\Http\Responses\Back\Resource\SaveResponseContract;
@@ -20,7 +20,7 @@ class SaveResponse implements SaveResponseContract, Responsable
     /**
      * SaveResponse constructor.
      *
-     * @param GroupModelContract $item
+     * @param  GroupModelContract  $item
      */
     public function __construct(GroupModelContract $item)
     {
@@ -30,14 +30,17 @@ class SaveResponse implements SaveResponseContract, Responsable
     /**
      * Возвращаем ответ при сохранении объекта.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      *
-     * @return RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function toResponse($request): RedirectResponse
+    public function toResponse($request)
     {
-        return response()->redirectToRoute('back.classifiers.groups.edit', [
-            $this->item->fresh()->id,
-        ]);
+        return response()->redirectToRoute(
+            'back.classifiers.groups.edit',
+            [
+                $this->item->fresh()->id,
+            ]
+        );
     }
 }

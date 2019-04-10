@@ -3,8 +3,8 @@
 namespace InetStudio\Classifiers\Groups\Contracts\Events\Back;
 
 /**
- * Interface ModifyGroupEventContract.
+ * Interface ModifyItemEventContract.
  */
-interface ModifyGroupEventContract
+interface ModifyItemEventContract
 {
 }

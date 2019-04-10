@@ -2,7 +2,7 @@
 
 namespace InetStudio\Classifiers\Groups\Http\Responses\Back\Resource;
 
-use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Responsable;
 use InetStudio\Classifiers\Groups\Contracts\Http\Responses\Back\Resource\IndexResponseContract;
 
@@ -19,7 +19,7 @@ class IndexResponse implements IndexResponseContract, Responsable
     /**
      * IndexResponse constructor.
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function __construct(array $data)
     {
@@ -29,11 +29,11 @@ class IndexResponse implements IndexResponseContract, Responsable
     /**
      * Возвращаем ответ при открытии списка объектов.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function toResponse($request): View
+    public function toResponse($request)
     {
         return view('admin.module.classifiers.groups::back.pages.index', $this->data);
     }

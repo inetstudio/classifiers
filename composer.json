@@ -1,30 +1,33 @@
 {
-    "name": "inetstudio/classifiers",
-    "description": "Package for classifiers",
-    "homepage": "https://github.com/inetstudio/classifiers",
-    "license": "MIT",
-    "authors": [
-      {
-        "name": "Konstantin Bukin",
-        "email": "bukin@inetstudio.ru"
-      }
-    ],
-    "autoload": {
-      "psr-4": {
-        "InetStudio\\Classifiers\\": "package/src/",
-        "InetStudio\\Classifiers\\Entries\\": "entities/entries/src/",
-        "InetStudio\\Classifiers\\Groups\\": "entities/groups/src/"
-      }
-    },
-    "extra": {
-      "laravel": {
-        "providers": [
-          "InetStudio\\Classifiers\\Providers\\ClassifiersServiceProvider",
-          "InetStudio\\Classifiers\\Entries\\Providers\\EntriesBindingsServiceProvider",
-          "InetStudio\\Classifiers\\Entries\\Providers\\EntriesServiceProvider",
-          "InetStudio\\Classifiers\\Groups\\Providers\\GroupsBindingsServiceProvider",
-          "InetStudio\\Classifiers\\Groups\\Providers\\GroupsServiceProvider"
-        ]
-      }
+  "name": "inetstudio/classifiers",
+  "description": "Package for classifiers",
+  "homepage": "https://github.com/inetstudio/classifiers",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Konstantin Bukin",
+      "email": "bukin@inetstudio.ru"
     }
+  ],
+  "require": {
+    "inetstudio/admin-panel": "1.8.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "InetStudio\\Classifiers\\": "package/src/",
+      "InetStudio\\Classifiers\\Entries\\": "entities/entries/src/",
+      "InetStudio\\Classifiers\\Groups\\": "entities/groups/src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "InetStudio\\Classifiers\\Providers\\ServiceProvider",
+        "InetStudio\\Classifiers\\Entries\\Providers\\EntriesBindingsServiceProvider",
+        "InetStudio\\Classifiers\\Entries\\Providers\\EntriesServiceProvider",
+        "InetStudio\\Classifiers\\Groups\\Providers\\BindingsServiceProvider",
+        "InetStudio\\Classifiers\\Groups\\Providers\\ServiceProvider"
+      ]
+    }
+  }
 }

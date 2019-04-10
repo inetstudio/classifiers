@@ -1,11 +1,11 @@
 <?php
 
-namespace InetStudio\Classifiers\Groups\Transformers\Back;
+namespace InetStudio\Classifiers\Groups\Transformers\Back\Utility;
 
 use League\Fractal\TransformerAbstract;
 use League\Fractal\Resource\Collection as FractalCollection;
 use InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract;
-use InetStudio\Classifiers\Groups\Contracts\Transformers\Back\SuggestionTransformerContract;
+use InetStudio\Classifiers\Groups\Contracts\Transformers\Back\Utility\SuggestionTransformerContract;
 
 /**
  * Class SuggestionTransformer.
@@ -15,14 +15,14 @@ class SuggestionTransformer extends TransformerAbstract implements SuggestionTra
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * SuggestionTransformer constructor.
      *
-     * @param $type
+     * @param  string  $type
      */
-    public function __construct($type)
+    public function __construct(string $type = '')
     {
         $this->type = $type;
     }
@@ -30,31 +30,23 @@ class SuggestionTransformer extends TransformerAbstract implements SuggestionTra
     /**
      * Подготовка данных для отображения в выпадающих списках.
      *
-     * @param GroupModelContract $item
+     * @param  GroupModelContract  $item
      *
      * @return array
-     *
-     * @throws \Throwable
      */
     public function transform(GroupModelContract $item): array
     {
-        if ($this->type && $this->type == 'autocomplete') {
-            $modelClass = get_class($item);
+        $itemData = [
+            'id' => $item['id'],
+            'name' => $item['name'],
+        ];
 
-            return [
-                'value' => $item->name,
-                'data' => [
-                    'id' => $item->id,
-                    'type' => $modelClass,
-                    'title' => $item->name,
-                ],
-            ];
-        } else {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-            ];
-        }
+        return ($this->type == 'autocomplete')
+            ? [
+                'value' => $item['name'],
+                'data' => $itemData,
+            ]
+            : $itemData;
     }
 
     /**

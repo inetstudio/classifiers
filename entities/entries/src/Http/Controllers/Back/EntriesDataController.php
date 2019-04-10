@@ -14,7 +14,7 @@ class EntriesDataController extends Controller implements EntriesDataControllerC
     /**
      * Получаем данные для отображения в таблице.
      *
-     * @param EntriesDataTableServiceContract $datatablesService
+     * @param  EntriesDataTableServiceContract  $datatablesService
      *
      * @return mixed
      */

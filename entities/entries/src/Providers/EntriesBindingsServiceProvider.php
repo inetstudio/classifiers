@@ -11,8 +11,8 @@ use Illuminate\Contracts\Support\DeferrableProvider;
 class EntriesBindingsServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
-    * @var  array
-    */
+     * @var  array
+     */
     public $bindings = [
         'InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract' => 'InetStudio\Classifiers\Entries\Models\EntryModel',
         'InetStudio\Classifiers\Entries\Contracts\Transformers\Back\SuggestionTransformerContract' => 'InetStudio\Classifiers\Entries\Transformers\Back\SuggestionTransformer',

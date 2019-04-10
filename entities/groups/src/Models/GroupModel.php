@@ -39,7 +39,9 @@ class GroupModel extends Model implements GroupModelContract, Auditable
      * @var array
      */
     protected $fillable = [
-        'name', 'alias', 'description',
+        'name',
+        'alias',
+        'description',
     ];
 
     /**
@@ -55,15 +57,15 @@ class GroupModel extends Model implements GroupModelContract, Auditable
 
     /**
      * Загрузка модели.
-     *
-     * @return void
      */
     protected static function boot()
     {
         parent::boot();
 
         self::$buildQueryScopeDefaults['columns'] = [
-            'id', 'name', 'alias',
+            'id',
+            'name',
+            'alias',
         ];
     }
 
@@ -94,7 +96,11 @@ class GroupModel extends Model implements GroupModelContract, Auditable
      */
     public function setDescriptionAttribute($value)
     {
-        $this->attributes['description'] = trim(str_replace("&nbsp;", ' ', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))));
+        $this->attributes['description'] = trim(
+            str_replace(
+                "&nbsp;", ' ', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))
+            )
+        );
     }
 
     /**

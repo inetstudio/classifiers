@@ -4,17 +4,15 @@ namespace InetStudio\Classifiers\Groups\Providers;
 
 use Collective\Html\FormBuilder;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 /**
- * Class GroupsServiceProvider.
+ * Class ServiceProvider.
  */
-class GroupsServiceProvider extends ServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
     /**
      * Загрузка сервиса.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -27,39 +25,45 @@ class GroupsServiceProvider extends ServiceProvider
 
     /**
      * Регистрация команд.
-     *
-     * @return void
      */
     protected function registerConsoleCommands(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                'InetStudio\Classifiers\Groups\Console\Commands\SetupCommand',
-            ]);
+        if (! $this->app->runningInConsole()) {
+            return;
         }
+
+        $this->commands(
+            [
+                'InetStudio\Classifiers\Groups\Console\Commands\SetupCommand',
+            ]
+        );
     }
 
     /**
      * Регистрация ресурсов.
-     *
-     * @return void
      */
     protected function registerPublishes(): void
     {
-        if ($this->app->runningInConsole()) {
-            if (! Schema::hasTable('classifiers_groups')) {
-                $timestamp = date('Y_m_d_His', time());
-                $this->publishes([
-                    __DIR__.'/../../database/migrations/create_classifiers_groups_tables.php.stub' => database_path('migrations/'.$timestamp.'_create_classifiers_groups_tables.php'),
-                ], 'migrations');
-            }
+        if (! $this->app->runningInConsole()) {
+            return;
         }
+
+        if (Schema::hasTable('classifiers_groups')) {
+            return;
+        }
+
+        $timestamp = date('Y_m_d_His', time());
+        $this->publishes(
+            [
+                __DIR__.'/../../database/migrations/create_classifiers_groups_tables.php.stub' => database_path(
+                    'migrations/'.$timestamp.'_create_classifiers_groups_tables.php'
+                ),
+            ], 'migrations'
+        );
     }
 
     /**
      * Регистрация путей.
-     *
-     * @return void
      */
     protected function registerRoutes(): void
     {
@@ -68,8 +72,6 @@ class GroupsServiceProvider extends ServiceProvider
 
     /**
      * Регистрация представлений.
-     *
-     * @return void
      */
     protected function registerViews(): void
     {
@@ -78,11 +80,13 @@ class GroupsServiceProvider extends ServiceProvider
 
     /**
      * Регистрация компонентов форм.
-     *
-     * @return void
      */
     protected function registerFormComponents()
     {
-        FormBuilder::component('classifiers_groups', 'admin.module.classifiers.groups::back.forms.fields.groups', ['name' => null, 'value' => null, 'attributes' => null]);
+        FormBuilder::component(
+            'classifiers_groups',
+            'admin.module.classifiers.groups::back.forms.fields.groups',
+            ['name' => null, 'value' => null, 'attributes' => null]
+        );
     }
 }

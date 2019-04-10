@@ -48,9 +48,7 @@ trait HasClassifiers
     /**
      * Attach the given Classifier(s) to the model.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
-     *
-     * @return void
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      */
     public function setClassifiersAttribute($classifiers)
     {
@@ -65,27 +63,29 @@ trait HasClassifiers
 
     /**
      * Boot the Classifierable trait for a model.
-     *
-     * @return void
      */
     public static function bootHasClassifiers()
     {
-        static::created(function (Model $classifierableModel) {
-            if ($classifierableModel->queuedClassifiers) {
-                $classifierableModel->attachClassifiers($classifierableModel->queuedClassifiers);
-                $classifierableModel->queuedClassifiers = [];
+        static::created(
+            function (Model $classifierableModel) {
+                if ($classifierableModel->queuedClassifiers) {
+                    $classifierableModel->attachClassifiers($classifierableModel->queuedClassifiers);
+                    $classifierableModel->queuedClassifiers = [];
+                }
             }
-        });
+        );
 
-        static::deleted(function (Model $classifierableModel) {
-            $classifierableModel->syncClassifiers(null);
-        });
+        static::deleted(
+            function (Model $classifierableModel) {
+                $classifierableModel->syncClassifiers(null);
+            }
+        );
     }
 
     /**
      * Get the Classifier list.
      *
-     * @param string $keyColumn
+     * @param  string  $keyColumn
      *
      * @return array
      */
@@ -97,9 +97,9 @@ trait HasClassifiers
     /**
      * Scope query with all the given Classifiers.
      *
-     * @param Builder $query
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
-     * @param string $column
+     * @param  Builder  $query
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  string  $column
      *
      * @return Builder
      */
@@ -108,11 +108,15 @@ trait HasClassifiers
         $classifiers = static::isClassifiersStringBased($classifiers)
             ? $classifiers : static::hydrateClassifiers($classifiers)->pluck($column);
 
-        collect($classifiers)->each(function ($classifier) use ($query, $column) {
-            $query->whereHas('classifiers', function (Builder $query) use ($classifier, $column) {
-                return $query->where($column, $classifier);
-            });
-        });
+        collect($classifiers)->each(
+            function ($classifier) use ($query, $column) {
+                $query->whereHas(
+                    'classifiers', function (Builder $query) use ($classifier, $column) {
+                    return $query->where($column, $classifier);
+                }
+                );
+            }
+        );
 
         return $query;
     }
@@ -120,9 +124,9 @@ trait HasClassifiers
     /**
      * Scope query with any of the given Classifiers.
      *
-     * @param Builder $query
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
-     * @param string $column
+     * @param  Builder  $query
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  string  $column
      *
      * @return Builder
      */
@@ -131,17 +135,19 @@ trait HasClassifiers
         $classifiers = static::isClassifiersStringBased($classifiers)
             ? $classifiers : static::hydrateClassifiers($classifiers)->pluck($column);
 
-        return $query->whereHas('classifiers', function (Builder $query) use ($classifiers, $column) {
+        return $query->whereHas(
+            'classifiers', function (Builder $query) use ($classifiers, $column) {
             $query->whereIn($column, (array) $classifiers);
-        });
+        }
+        );
     }
 
     /**
      * Scope query with any of the given Classifiers.
      *
-     * @param Builder $query
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
-     * @param string $column
+     * @param  Builder  $query
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  string  $column
      *
      * @return Builder
      */
@@ -153,9 +159,9 @@ trait HasClassifiers
     /**
      * Scope query without the given Classifiers.
      *
-     * @param Builder $query
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
-     * @param string $column
+     * @param  Builder  $query
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  string  $column
      *
      * @return Builder
      */
@@ -164,15 +170,17 @@ trait HasClassifiers
         $classifiers = static::isClassifiersStringBased($classifiers)
             ? $classifiers : static::hydrateClassifiers($classifiers)->pluck($column);
 
-        return $query->whereDoesntHave('classifiers', function (Builder $query) use ($classifiers, $column) {
+        return $query->whereDoesntHave(
+            'classifiers', function (Builder $query) use ($classifiers, $column) {
             $query->whereIn($column, (array) $classifiers);
-        });
+        }
+        );
     }
 
     /**
      * Scope query without any Classifiers.
      *
-     * @param Builder $query
+     * @param  Builder  $query
      *
      * @return Builder
      */
@@ -184,7 +192,7 @@ trait HasClassifiers
     /**
      * Attach the given Classifier(ies) to the model.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      *
      * @return $this
      */
@@ -198,7 +206,7 @@ trait HasClassifiers
     /**
      * Sync the given Classifier(s) to the model.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract|null $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract|null  $classifiers
      *
      * @return $this
      */
@@ -212,7 +220,7 @@ trait HasClassifiers
     /**
      * Detach the given Classifier(s) from the model.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      *
      * @return $this
      */
@@ -226,7 +234,7 @@ trait HasClassifiers
     /**
      * Determine if the model has any the given Classifiers.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */
@@ -268,7 +276,7 @@ trait HasClassifiers
     /**
      * Determine if the model has any the given Classifiers.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */
@@ -280,7 +288,7 @@ trait HasClassifiers
     /**
      * Determine if the model has all of the given Classifiers.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */
@@ -315,7 +323,9 @@ trait HasClassifiers
 
         // Collection of Classifier models
         if ($classifiers instanceof Collection) {
-            return $this->classifiers->count() === $classifiers->count() && $this->classifiers->diff($classifiers)->isEmpty();
+            return $this->classifiers->count() === $classifiers->count() && $this->classifiers->diff(
+                    $classifiers
+                )->isEmpty();
         }
 
         return false;
@@ -324,10 +334,8 @@ trait HasClassifiers
     /**
      * Set the given Classifier(s) to the model.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
-     * @param string $action
-     *
-     * @return void
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  string  $action
      */
     protected function setClassifiers($classifiers, string $action)
     {
@@ -350,7 +358,7 @@ trait HasClassifiers
     /**
      * Hydrate Classifiers.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      *
      * @return \Illuminate\Support\Collection
      */
@@ -368,19 +376,21 @@ trait HasClassifiers
     /**
      * Determine if the given Classifier(s) are string based.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */
     protected function isClassifiersStringBased($classifiers)
     {
-        return is_string($classifiers) || (is_array($classifiers) && isset($classifiers[0]) && is_string($classifiers[0]));
+        return is_string($classifiers) || (is_array($classifiers) && isset($classifiers[0]) && is_string(
+                    $classifiers[0]
+                ));
     }
 
     /**
      * Determine if the given Classifier(s) are integer based.
      *
-     * @param int|string|array|\ArrayAccess|EntryModelContract $classifiers
+     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */

@@ -25,8 +25,6 @@ class SetupCommand extends BaseSetupCommand
 
     /**
      * Инициализация команд.
-     *
-     * @return void
      */
     protected function initCommands(): void
     {
@@ -46,7 +44,7 @@ class SetupCommand extends BaseSetupCommand
                 'description' => 'Publish migrations',
                 'command' => 'vendor:publish',
                 'params' => [
-                    '--provider' => 'InetStudio\Classifiers\Providers\ClassifiersServiceProvider',
+                    '--provider' => 'InetStudio\Classifiers\Providers\ServiceProvider',
                     '--tag' => 'migrations',
                 ],
             ],
