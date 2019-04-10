@@ -16,7 +16,7 @@ use InetStudio\Classifiers\Groups\Contracts\Services\Back\DataTableServiceContra
 class DataTableService extends DataTable implements DataTableServiceContract
 {
     /**
-     * @var
+     * @var GroupModelContract
      */
     public $model;
 

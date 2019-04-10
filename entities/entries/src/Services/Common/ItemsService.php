@@ -106,7 +106,7 @@ class ItemsService extends BaseService implements ItemsServiceContract
      *
      * @return Collection
      */
-    public function getEntriesByIDsAndGroup($ids, string $group): Collection
+    public function getEntriesByIdsAndGroup($ids, string $group): Collection
     {
         $values = $this->model::whereIn('id', (array) $ids)
             ->whereHas(

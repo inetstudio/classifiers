@@ -131,7 +131,7 @@ class ResourceController extends Controller implements ResourceControllerContrac
      *
      * @throws BindingResolutionException
      */
-    private function save(
+    protected function save(
         ItemsServiceContract $resourceService,
         SaveItemRequestContract $request,
         int $id = 0

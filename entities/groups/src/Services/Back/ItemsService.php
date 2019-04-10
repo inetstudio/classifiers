@@ -51,38 +51,6 @@ class ItemsService extends BaseService implements ItemsServiceContract
     }
 
     /**
-     * Получаем подсказки.
-     *
-     * @param  string  $search
-     * @param $type
-     *
-     * @return array
-     */
-    public function getSuggestions(string $search, $type): array
-    {
-        $items = $this->model::where([['name', 'LIKE', '%'.$search.'%']])->get();
-
-        $resource = (app()->makeWith(
-            'InetStudio\Classifiers\Groups\Contracts\Transformers\Back\SuggestionTransformerContract', [
-                                                                                                         'type' => $type,
-                                                                                                     ]
-        ))->transformCollection($items);
-
-        $manager = new Manager();
-        $manager->setSerializer(new DataArraySerializer());
-
-        $transformation = $manager->createData($resource)->toArray();
-
-        if ($type && $type == 'autocomplete') {
-            $data['suggestions'] = $transformation['data'];
-        } else {
-            $data['items'] = $transformation['data'];
-        }
-
-        return $data;
-    }
-
-    /**
      * Присваиваем группы объекту.
      *
      * @param $groupsIds

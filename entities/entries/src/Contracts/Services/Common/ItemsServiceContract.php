@@ -8,7 +8,7 @@ use InetStudio\AdminPanel\Base\Contracts\Services\BaseServiceContract;
 /**
  * Interface ItemsServiceContract.
  */
-interface ItemsServiceContract extends  BaseServiceContract
+interface ItemsServiceContract extends BaseServiceContract
 {
     /**
      * Присваиваем классификаторы объекту.
@@ -55,5 +55,5 @@ interface ItemsServiceContract extends  BaseServiceContract
      *
      * @return Collection
      */
-    public function getEntriesByIDsAndGroup($ids, string $group): Collection;
+    public function getEntriesByIdsAndGroup($ids, string $group): Collection;
 }

@@ -25,6 +25,6 @@
        (isset($attributes['field']['readonly']) && $attributes['field']['readonly']) ? ['readonly' => 'readonly'] : []
     ),
     'options' => [
-        'values' => (old('classifiers')) ? $entriesService->getEntriesByIDsAndGroup(old('classifiers'), $attributes['field']['group'])->pluck('value', 'id')->toArray() : $values,
+        'values' => (old('classifiers')) ? $entriesService->getEntriesByIdsAndGroup(old('classifiers'), $attributes['field']['group'])->pluck('value', 'id')->toArray() : $values,
     ],
 ]) !!}

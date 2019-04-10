@@ -100,7 +100,7 @@ class GroupModel extends Model implements GroupModelContract
     {
         $value = (isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : '');
 
-        $this->attributes['description'] = trim(str_replace("&nbsp;", ' ', strip_tags($value)));
+        $this->attributes['description'] = trim(str_replace('&nbsp;', ' ', strip_tags($value)));
     }
 
     /**

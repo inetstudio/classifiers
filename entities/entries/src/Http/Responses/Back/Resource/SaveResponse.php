@@ -36,10 +36,12 @@ class SaveResponse implements SaveResponseContract, Responsable
      */
     public function toResponse($request)
     {
+        $item = $this->item->fresh();
+
         return response()->redirectToRoute(
             'back.classifiers.entries.edit',
             [
-                $this->item->fresh()->id,
+                $item['id'],
             ]
         );
     }
