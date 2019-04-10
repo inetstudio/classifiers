@@ -2,10 +2,12 @@
 
 namespace InetStudio\Classifiers\Models\Traits;
 
+use ArrayAccess;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
 
 /**
@@ -22,10 +24,12 @@ trait HasClassifiers
 
     /**
      * Get Classifier class name.
-     *
+     * 
      * @return string
+     * 
+     * @throws BindingResolutionException
      */
-    public static function getClassifierClassName(): string
+    public function getClassifierClassName(): string
     {
         $model = app()->make(EntryModelContract::class);
 
@@ -35,22 +39,25 @@ trait HasClassifiers
     /**
      * Get all attached Classifiers to the model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     * @return MorphToMany
+     *
+     * @throws BindingResolutionException
      */
     public function classifiers(): MorphToMany
     {
-        return $this->morphToMany(
-            static::getClassifierClassName(),
-            'classifierable'
-        )->withTimestamps();
+        $className = $this->getClassifierClassName();
+
+        return $this->morphToMany($className, 'classifierable')->withTimestamps();
     }
 
     /**
      * Attach the given Classifier(s) to the model.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
+     *
+     * @throws BindingResolutionException
      */
-    public function setClassifiersAttribute($classifiers)
+    public function setClassifiersAttribute($classifiers): void
     {
         if (! $this->exists) {
             $this->queuedClassifiers = $classifiers;
@@ -88,6 +95,8 @@ trait HasClassifiers
      * @param  string  $keyColumn
      *
      * @return array
+     *
+     * @throws BindingResolutionException
      */
     public function classifierList(string $keyColumn = 'id'): array
     {
@@ -98,22 +107,25 @@ trait HasClassifiers
      * Scope query with all the given Classifiers.
      *
      * @param  Builder  $query
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      * @param  string  $column
      *
      * @return Builder
+     *
+     * @throws BindingResolutionException
      */
     public function scopeWithAllClassifiers(Builder $query, $classifiers, string $column = 'id'): Builder
     {
-        $classifiers = static::isClassifiersStringBased($classifiers)
-            ? $classifiers : static::hydrateClassifiers($classifiers)->pluck($column);
+        $classifiers = $this->isClassifiersStringBased($classifiers)
+            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column);
 
         collect($classifiers)->each(
             function ($classifier) use ($query, $column) {
                 $query->whereHas(
-                    'classifiers', function (Builder $query) use ($classifier, $column) {
-                    return $query->where($column, $classifier);
-                }
+                    'classifiers',
+                    function (Builder $query) use ($classifier, $column) {
+                        return $query->where($column, $classifier);
+                    }
                 );
             }
         );
@@ -125,20 +137,23 @@ trait HasClassifiers
      * Scope query with any of the given Classifiers.
      *
      * @param  Builder  $query
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      * @param  string  $column
      *
      * @return Builder
+     *
+     * @throws BindingResolutionException
      */
     public function scopeWithAnyClassifiers(Builder $query, $classifiers, string $column = 'id'): Builder
     {
-        $classifiers = static::isClassifiersStringBased($classifiers)
-            ? $classifiers : static::hydrateClassifiers($classifiers)->pluck($column);
+        $classifiers = $this->isClassifiersStringBased($classifiers)
+            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column);
 
         return $query->whereHas(
-            'classifiers', function (Builder $query) use ($classifiers, $column) {
-            $query->whereIn($column, (array) $classifiers);
-        }
+            'classifiers',
+            function (Builder $query) use ($classifiers, $column) {
+                $query->whereIn($column, (array) $classifiers);
+            }
         );
     }
 
@@ -146,34 +161,39 @@ trait HasClassifiers
      * Scope query with any of the given Classifiers.
      *
      * @param  Builder  $query
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      * @param  string  $column
      *
      * @return Builder
+     *
+     * @throws BindingResolutionException
      */
     public function scopeWithClassifiers(Builder $query, $classifiers, string $column = 'id'): Builder
     {
-        return static::scopeWithAnyClassifiers($query, $classifiers, $column);
+        return $this->scopeWithAnyClassifiers($query, $classifiers, $column);
     }
 
     /**
      * Scope query without the given Classifiers.
      *
      * @param  Builder  $query
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      * @param  string  $column
      *
      * @return Builder
+     *
+     * @throws BindingResolutionException
      */
     public function scopeWithoutClassifiers(Builder $query, $classifiers, string $column = 'alias'): Builder
     {
-        $classifiers = static::isClassifiersStringBased($classifiers)
-            ? $classifiers : static::hydrateClassifiers($classifiers)->pluck($column);
+        $classifiers = $this->isClassifiersStringBased($classifiers)
+            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column);
 
         return $query->whereDoesntHave(
-            'classifiers', function (Builder $query) use ($classifiers, $column) {
-            $query->whereIn($column, (array) $classifiers);
-        }
+            'classifiers',
+            function (Builder $query) use ($classifiers, $column) {
+                $query->whereIn($column, (array) $classifiers);
+            }
         );
     }
 
@@ -192,13 +212,15 @@ trait HasClassifiers
     /**
      * Attach the given Classifier(ies) to the model.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      *
      * @return $this
+     *
+     * @throws BindingResolutionException
      */
     public function attachClassifiers($classifiers)
     {
-        static::setClassifiers($classifiers, 'syncWithoutDetaching');
+        $this->setClassifiers($classifiers, 'syncWithoutDetaching');
 
         return $this;
     }
@@ -206,13 +228,15 @@ trait HasClassifiers
     /**
      * Sync the given Classifier(s) to the model.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract|null  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract|null  $classifiers
      *
      * @return $this
+     *
+     * @throws BindingResolutionException
      */
     public function syncClassifiers($classifiers)
     {
-        static::setClassifiers($classifiers, 'sync');
+        $this->setClassifiers($classifiers, 'sync');
 
         return $this;
     }
@@ -220,13 +244,15 @@ trait HasClassifiers
     /**
      * Detach the given Classifier(s) from the model.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      *
      * @return $this
+     *
+     * @throws BindingResolutionException
      */
     public function detachClassifiers($classifiers)
     {
-        static::setClassifiers($classifiers, 'detach');
+        $this->setClassifiers($classifiers, 'detach');
 
         return $this;
     }
@@ -234,7 +260,7 @@ trait HasClassifiers
     /**
      * Determine if the model has any the given Classifiers.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */
@@ -252,7 +278,7 @@ trait HasClassifiers
 
         // Single Classifier model
         if ($classifiers instanceof EntryModelContract) {
-            return $this->classifiers->contains('alias', $classifiers->alias);
+            return $this->classifiers->contains('alias', $classifiers['alias']);
         }
 
         // Array of Classifier aliases
@@ -276,19 +302,19 @@ trait HasClassifiers
     /**
      * Determine if the model has any the given Classifiers.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */
     public function hasAnyClassifier($classifiers): bool
     {
-        return static::hasClassifier($classifiers);
+        return $this->hasClassifier($classifiers);
     }
 
     /**
      * Determine if the model has all of the given Classifiers.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */
@@ -306,7 +332,7 @@ trait HasClassifiers
 
         // Single Classifier model
         if ($classifiers instanceof EntryModelContract) {
-            return $this->classifiers->contains('alias', $classifiers->alias);
+            return $this->classifiers->contains('alias', $classifiers['alias']);
         }
 
         // Array of Classifier aliases
@@ -334,16 +360,18 @@ trait HasClassifiers
     /**
      * Set the given Classifier(s) to the model.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      * @param  string  $action
+     *
+     * @throws BindingResolutionException
      */
-    protected function setClassifiers($classifiers, string $action)
+    protected function setClassifiers($classifiers, string $action): void
     {
         // Fix exceptional event name
         $event = $action === 'syncWithoutDetaching' ? 'attach' : $action;
 
         // Hydrate Classifiers
-        $classifiers = static::hydrateClassifiers($classifiers)->pluck('id')->toArray();
+        $classifiers = $this->hydrateClassifiers($classifiers)->pluck('id')->toArray();
 
         // Fire the Classifier syncing event
         static::$dispatcher->dispatch("inetstudio.classifiers.entries.{$event}ing", [$this, $classifiers]);
@@ -358,16 +386,18 @@ trait HasClassifiers
     /**
      * Hydrate Classifiers.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
+     *
+     * @throws BindingResolutionException
      */
-    protected function hydrateClassifiers($classifiers)
+    protected function hydrateClassifiers($classifiers): Collection
     {
-        $isClassifiersStringBased = static::isClassifiersStringBased($classifiers);
-        $isClassifiersIntBased = static::isClassifiersIntBased($classifiers);
+        $isClassifiersStringBased = $this->isClassifiersStringBased($classifiers);
+        $isClassifiersIntBased = $this->isClassifiersIntBased($classifiers);
         $field = $isClassifiersStringBased ? 'alias' : 'id';
-        $className = static::getClassifierClassName();
+        $className = $this->getClassifierClassName();
 
         return $isClassifiersStringBased || $isClassifiersIntBased
             ? $className::query()->whereIn($field, (array) $classifiers)->get() : collect($classifiers);
@@ -376,11 +406,11 @@ trait HasClassifiers
     /**
      * Determine if the given Classifier(s) are string based.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */
-    protected function isClassifiersStringBased($classifiers)
+    protected function isClassifiersStringBased($classifiers): bool
     {
         return is_string($classifiers) || (is_array($classifiers) && isset($classifiers[0]) && is_string(
                     $classifiers[0]
@@ -390,7 +420,7 @@ trait HasClassifiers
     /**
      * Determine if the given Classifier(s) are integer based.
      *
-     * @param  int|string|array|\ArrayAccess|EntryModelContract  $classifiers
+     * @param  int|string|array|ArrayAccess|EntryModelContract  $classifiers
      *
      * @return bool
      */

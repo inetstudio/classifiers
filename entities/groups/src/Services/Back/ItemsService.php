@@ -36,7 +36,6 @@ class ItemsService extends BaseService implements ItemsServiceContract
         $action = ($id) ? 'отредактирована' : 'создана';
 
         $itemData = Arr::only($data, $this->model->getFillable());
-
         $item = $this->saveModel($itemData, $id);
 
         event(
