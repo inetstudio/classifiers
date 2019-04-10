@@ -136,7 +136,7 @@ class ResourceController extends Controller implements ResourceControllerContrac
         SaveItemRequestContract $request,
         int $id = 0
     ): SaveResponseContract {
-        $data = $request->only($resourceService->model->getFillable());
+        $data = $request->all();
 
         $item = $resourceService->save($data, $id);
 

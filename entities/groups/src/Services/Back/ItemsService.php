@@ -2,9 +2,8 @@
 
 namespace InetStudio\Classifiers\Groups\Services\Back;
 
-use League\Fractal\Manager;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
-use League\Fractal\Serializer\DataArraySerializer;
 use InetStudio\AdminPanel\Base\Services\BaseService;
 use InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract;
 use InetStudio\Classifiers\Groups\Contracts\Services\Back\ItemsServiceContract;
@@ -36,7 +35,9 @@ class ItemsService extends BaseService implements ItemsServiceContract
     {
         $action = ($id) ? 'отредактирована' : 'создана';
 
-        $item = $this->saveModel($data, $id);
+        $itemData = Arr::only($data, $this->model->getFillable());
+
+        $item = $this->saveModel($itemData, $id);
 
         event(
             app()->makeWith(

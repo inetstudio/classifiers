@@ -2,6 +2,7 @@
 
 namespace InetStudio\Classifiers\Entries\Services\Back;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
@@ -29,9 +30,11 @@ class ItemsService extends CommonItemsService implements ItemsServiceContract
 
         $action = ($id) ? 'отредактирована' : 'создана';
 
-        $item = $this->saveModel($data, $id);
+        $itemData = Arr::only($data, $this->model->getFillable());
+        $item = $this->saveModel($itemData, $id);
 
-        $groupsService->attachToObject($data['groups'], $item);
+        $groupsData = collect(Arr::get($data, 'groups', []));
+        $groupsService->attachToObject($groupsData, $item);
 
         event(
             app()->makeWith(
