@@ -2,15 +2,13 @@
 
 namespace InetStudio\Classifiers\Entries\Http\Requests\Back;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use InetStudio\Classifiers\Entries\Contracts\Http\Requests\Back\SaveEntryRequestContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Requests\Back\SaveItemRequestContract;
 
 /**
- * Class SaveEntryRequest.
+ * Class SaveItemRequest.
  */
-class SaveEntryRequest extends FormRequest implements SaveEntryRequestContract
+class SaveItemRequest extends FormRequest implements SaveItemRequestContract
 {
     /**
      * Определить, авторизован ли пользователь для этого запроса.
@@ -42,11 +40,9 @@ class SaveEntryRequest extends FormRequest implements SaveEntryRequestContract
     /**
      * Правила проверки запроса.
      *
-     * @param  Request  $request
-     *
      * @return array
      */
-    public function rules(Request $request): array
+    public function rules(): array
     {
         return [
             'groups' => 'required',
@@ -57,7 +53,7 @@ class SaveEntryRequest extends FormRequest implements SaveEntryRequestContract
                     $query->where('group', $request->get('group'));
                 }),*/
             ],
-            'alias' => 'max:255|unique:classifiers_entries,alias,'.$request->get('entry_id'),
+            'alias' => 'max:255|unique:classifiers_entries,alias,'.$this->get('entry_id'),
         ];
     }
 }

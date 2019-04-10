@@ -2,20 +2,24 @@
 
 namespace InetStudio\Classifiers\Entries\Models;
 
+use OwenIt\Auditing\Auditable;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
 use InetStudio\AdminPanel\Base\Models\Traits\Scopes\BuildQueryScopeTrait;
 
 /**
  * Class EntryModel.
  */
-class EntryModel extends Model implements EntryModelContract, Auditable
+class EntryModel extends Model implements EntryModelContract
 {
+    use Auditable;
     use SoftDeletes;
-    use \OwenIt\Auditing\Auditable;
     use BuildQueryScopeTrait;
+
+    const MATERIAL_TYPE = 'classifiers_entry';
 
     /**
      * Should the timestamps be audited?
@@ -73,12 +77,48 @@ class EntryModel extends Model implements EntryModelContract, Auditable
     }
 
     /**
-     * Группы.
+     * Сеттер атрибута value.
+     *
+     * @param $value
      */
-    public function groups()
+    public function setValueAttribute($value)
     {
+        $this->attributes['value'] = strip_tags($value);
+    }
+
+    /**
+     * Сеттер атрибута alias.
+     *
+     * @param $value
+     */
+    public function setAliasAttribute($value)
+    {
+        $this->attributes['alias'] = strip_tags($value);
+    }
+
+    /**
+     * Тип материала.
+     *
+     * @return string
+     */
+    public function getTypeAttribute(): string
+    {
+        return self::MATERIAL_TYPE;
+    }
+
+    /**
+     * Группы.
+     *
+     * @return BelongsToMany
+     *
+     * @throws BindingResolutionException
+     */
+    public function groups(): BelongsToMany
+    {
+        $groupModel = app()->make('InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract');
+
         return $this->belongsToMany(
-            app()->make('InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract'),
+            get_class($groupModel),
             'classifiers_groups_entries',
             'entry_model_id',
             'group_model_id'

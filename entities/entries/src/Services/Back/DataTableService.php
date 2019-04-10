@@ -2,15 +2,19 @@
 
 namespace InetStudio\Classifiers\Entries\Services\Back;
 
+use Exception;
 use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Services\DataTable;
-use InetStudio\Classifiers\Entries\Contracts\Services\Back\EntriesDataTableServiceContract;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
+use InetStudio\Classifiers\Entries\Contracts\Services\Back\DataTableServiceContract;
 
 /**
- * Class EntriesDataTableService.
+ * Class DataTableService.
  */
-class EntriesDataTableService extends DataTable implements EntriesDataTableServiceContract
+class DataTableService extends DataTable implements DataTableServiceContract
 {
     /**
      * @var
@@ -18,21 +22,24 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
     public $model;
 
     /**
-     * EntriesDataTableService constructor.
+     * DataTableService constructor.
+     *
+     * @param  EntryModelContract  $model
      */
-    public function __construct()
+    public function __construct(EntryModelContract $model)
     {
-        $this->model = app()->make('InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract');
+        $this->model = $model;
     }
 
     /**
      * Запрос на получение данных таблицы.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      *
-     * @throws \Exception
+     * @throws BindingResolutionException
+     * @throws Exception
      */
-    public function ajax()
+    public function ajax(): JsonResponse
     {
         $transformer = app()->make(
             'InetStudio\Classifiers\Entries\Contracts\Transformers\Back\Resource\IndexTransformerContract'
@@ -64,10 +71,11 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
     /**
      * Optional method if you want to use html builder.
      *
-     * @return \Yajra\DataTables\Html\Builder
+     * @return Builder
      */
     public function html(): Builder
     {
+        /** @var Builder $table */
         $table = app('datatables.html');
 
         return $table
@@ -94,7 +102,7 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
                 'name' => 'actions',
                 'title' => 'Действия',
                 'orderable' => false,
-                'searchable' => false
+                'searchable' => false,
             ],
         ];
     }
@@ -119,7 +127,7 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
      */
     protected function getParameters(): array
     {
-        $i18n = trans('admin::datatables');
+        $translation = trans('admin::datatables');
 
         return [
             'paging' => true,
@@ -127,7 +135,7 @@ class EntriesDataTableService extends DataTable implements EntriesDataTableServi
             'searching' => true,
             'info' => false,
             'searchDelay' => 350,
-            'language' => $i18n,
+            'language' => $translation,
         ];
     }
 }

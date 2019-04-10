@@ -2,19 +2,21 @@
 
 namespace InetStudio\Classifiers\Groups\Models;
 
+use OwenIt\Auditing\Auditable;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use InetStudio\Classifiers\Groups\Contracts\Models\GroupModelContract;
 use InetStudio\AdminPanel\Base\Models\Traits\Scopes\BuildQueryScopeTrait;
 
 /**
  * Class GroupModel.
  */
-class GroupModel extends Model implements GroupModelContract, Auditable
+class GroupModel extends Model implements GroupModelContract
 {
+    use Auditable;
     use SoftDeletes;
-    use \OwenIt\Auditing\Auditable;
     use BuildQueryScopeTrait;
 
     const MATERIAL_TYPE = 'classifiers_group';
@@ -90,17 +92,15 @@ class GroupModel extends Model implements GroupModelContract, Auditable
     }
 
     /**
-     * Сеттер атрибута numeric.
+     * Сеттер атрибута description.
      *
      * @param $value
      */
     public function setDescriptionAttribute($value)
     {
-        $this->attributes['description'] = trim(
-            str_replace(
-                "&nbsp;", ' ', strip_tags((isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : ''))
-            )
-        );
+        $value = (isset($value['text'])) ? $value['text'] : (! is_array($value) ? $value : '');
+
+        $this->attributes['description'] = trim(str_replace("&nbsp;", ' ', strip_tags($value)));
     }
 
     /**
@@ -108,18 +108,24 @@ class GroupModel extends Model implements GroupModelContract, Auditable
      *
      * @return string
      */
-    public function getTypeAttribute()
+    public function getTypeAttribute(): string
     {
         return self::MATERIAL_TYPE;
     }
 
     /**
-     * Группы.
+     * Записи классификатора.
+     *
+     * @return BelongsToMany
+     *
+     * @throws BindingResolutionException
      */
-    public function entries()
+    public function entries(): BelongsToMany
     {
+        $entryModel = app()->make('InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract');
+
         return $this->belongsToMany(
-            app()->make('InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract'),
+            get_class($entryModel),
             'classifiers_groups_entries',
             'group_model_id',
             'entry_model_id'

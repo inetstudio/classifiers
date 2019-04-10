@@ -1,10 +1,10 @@
 <?php
 
-namespace InetStudio\Classifiers\Groups\Contracts\Http\Controllers\Back;
+namespace InetStudio\Classifiers\Entries\Contracts\Http\Controllers\Back;
 
 use Illuminate\Http\Request;
-use InetStudio\Classifiers\Groups\Contracts\Services\Back\UtilityServiceContract;
-use InetStudio\Classifiers\Groups\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract;
+use InetStudio\Classifiers\Entries\Contracts\Services\Back\UtilityServiceContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract;
 
 /**
  * Interface UtilityControllerContract.
@@ -12,7 +12,7 @@ use InetStudio\Classifiers\Groups\Contracts\Http\Responses\Back\Utility\Suggesti
 interface UtilityControllerContract
 {
     /**
-     * Возвращаем группы для поля.
+     * Возвращаем классификаторы для поля.
      *
      * @param  UtilityServiceContract  $utilityService
      * @param  Request  $request

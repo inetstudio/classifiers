@@ -2,7 +2,7 @@
 
 namespace InetStudio\Classifiers\Entries\Http\Responses\Back\Resource;
 
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Responsable;
 use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
 use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\SaveResponseContract;
@@ -30,16 +30,17 @@ class SaveResponse implements SaveResponseContract, Responsable
     /**
      * Возвращаем ответ при сохранении объекта.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      *
-     * @return RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function toResponse($request): RedirectResponse
+    public function toResponse($request)
     {
         return response()->redirectToRoute(
-            'back.classifiers.entries.edit', [
-            $this->item->fresh()->id,
-        ]
+            'back.classifiers.entries.edit',
+            [
+                $this->item->fresh()->id,
+            ]
         );
     }
 }

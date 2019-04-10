@@ -2,7 +2,7 @@
 
 namespace InetStudio\Classifiers\Entries\Http\Responses\Back\Resource;
 
-use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Responsable;
 use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\FormResponseContract;
 
@@ -29,11 +29,11 @@ class FormResponse implements FormResponseContract, Responsable
     /**
      * Возвращаем ответ при открытии формы объекта.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      *
-     * @return View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function toResponse($request): View
+    public function toResponse($request)
     {
         return view('admin.module.classifiers.entries::back.pages.form', $this->data);
     }

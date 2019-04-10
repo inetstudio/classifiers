@@ -1,11 +1,11 @@
 <?php
 
-namespace InetStudio\Classifiers\Entries\Transformers\Back;
+namespace InetStudio\Classifiers\Entries\Transformers\Back\Utility;
 
 use League\Fractal\TransformerAbstract;
 use League\Fractal\Resource\Collection as FractalCollection;
 use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
-use InetStudio\Classifiers\Entries\Contracts\Transformers\Back\SuggestionTransformerContract;
+use InetStudio\Classifiers\Entries\Contracts\Transformers\Back\Utility\SuggestionTransformerContract;
 
 /**
  * Class SuggestionTransformer.
@@ -13,16 +13,16 @@ use InetStudio\Classifiers\Entries\Contracts\Transformers\Back\SuggestionTransfo
 class SuggestionTransformer extends TransformerAbstract implements SuggestionTransformerContract
 {
     /**
-     * @var
+     * @var string
      */
     protected $type;
 
     /**
      * SuggestionTransformer constructor.
      *
-     * @param $type
+     * @param  string  $type
      */
-    public function __construct($type)
+    public function __construct(string $type = '')
     {
         $this->type = $type;
     }
@@ -33,28 +33,20 @@ class SuggestionTransformer extends TransformerAbstract implements SuggestionTra
      * @param  EntryModelContract  $item
      *
      * @return array
-     *
-     * @throws \Throwable
      */
     public function transform(EntryModelContract $item): array
     {
-        if ($this->type && $this->type == 'autocomplete') {
-            $modelClass = get_class($item);
+        $itemData = [
+            'id' => $item['id'],
+            'name' => $item['title'],
+        ];
 
-            return [
-                'value' => $item->title,
-                'data' => [
-                    'id' => $item->id,
-                    'type' => $modelClass,
-                    'title' => $item->value,
-                ],
-            ];
-        } else {
-            return [
-                'id' => $item->id,
-                'name' => $item->value,
-            ];
-        }
+        return ($this->type == 'autocomplete')
+            ? [
+                'value' => $item['title'],
+                'data' => $itemData,
+            ]
+            : $itemData;
     }
 
     /**

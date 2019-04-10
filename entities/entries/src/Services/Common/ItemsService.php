@@ -1,23 +1,26 @@
 <?php
 
-namespace InetStudio\Classifiers\Entries\Services;
+namespace InetStudio\Classifiers\Entries\Services\Common;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use InetStudio\AdminPanel\Base\Services\BaseService;
-use InetStudio\Classifiers\Entries\Contracts\Services\EntriesServiceContract;
+use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
+use InetStudio\Classifiers\Entries\Contracts\Services\Common\ItemsServiceContract;
 
 /**
- * Class EntriesService.
+ * Class ItemsService.
  */
-class EntriesService extends BaseService implements EntriesServiceContract
+class ItemsService extends BaseService implements ItemsServiceContract
 {
     /**
-     * EntriesService constructor.
+     * ItemsService constructor.
+     *
+     * @param  EntryModelContract  $model
      */
-    public function __construct()
+    public function __construct(EntryModelContract $model)
     {
-        parent::__construct(app()->make('InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract'));
+        parent::__construct($model);
     }
 
     /**
@@ -53,9 +56,10 @@ class EntriesService extends BaseService implements EntriesServiceContract
     public function getItemEntriesByGroup($item, string $group): Collection
     {
         $values = $item->classifiers()->whereHas(
-            'groups', function ($query) use ($group) {
-            $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-        }
+            'groups',
+            function ($query) use ($group) {
+                $query->where('name', '=', $group)->orWhere('alias', '=', $group);
+            }
         )->get();
 
         return $values;
@@ -71,9 +75,10 @@ class EntriesService extends BaseService implements EntriesServiceContract
     public function getEntriesByGroup(string $group): Collection
     {
         $values = $this->model::whereHas(
-            'groups', function ($query) use ($group) {
-            $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-        }
+            'groups',
+            function ($query) use ($group) {
+                $query->where('name', '=', $group)->orWhere('alias', '=', $group);
+            }
         )->get();
 
         return $values;
@@ -105,9 +110,10 @@ class EntriesService extends BaseService implements EntriesServiceContract
     {
         $values = $this->model::whereIn('id', (array) $ids)
             ->whereHas(
-                'groups', function ($query) use ($group) {
-                $query->where('name', '=', $group)->orWhere('alias', '=', $group);
-            }
+                'groups',
+                function ($query) use ($group) {
+                    $query->where('name', '=', $group)->orWhere('alias', '=', $group);
+                }
             )
             ->get();
 

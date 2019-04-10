@@ -23,8 +23,8 @@
     "laravel": {
       "providers": [
         "InetStudio\\Classifiers\\Providers\\ServiceProvider",
-        "InetStudio\\Classifiers\\Entries\\Providers\\EntriesBindingsServiceProvider",
-        "InetStudio\\Classifiers\\Entries\\Providers\\EntriesServiceProvider",
+        "InetStudio\\Classifiers\\Entries\\Providers\\BindingsServiceProvider",
+        "InetStudio\\Classifiers\\Entries\\Providers\\ServiceProvider",
         "InetStudio\\Classifiers\\Groups\\Providers\\BindingsServiceProvider",
         "InetStudio\\Classifiers\\Groups\\Providers\\ServiceProvider"
       ]

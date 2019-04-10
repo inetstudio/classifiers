@@ -1,17 +1,17 @@
 <?php
 
-namespace InetStudio\Classifiers\Groups\Http\Controllers\Back;
+namespace InetStudio\Classifiers\Entries\Http\Controllers\Back;
 
 use InetStudio\AdminPanel\Base\Http\Controllers\Controller;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use InetStudio\Classifiers\Groups\Contracts\Services\Back\ItemsServiceContract;
-use InetStudio\Classifiers\Groups\Contracts\Services\Back\DataTableServiceContract;
-use InetStudio\Classifiers\Groups\Contracts\Http\Requests\Back\SaveItemRequestContract;
-use InetStudio\Classifiers\Groups\Contracts\Http\Controllers\Back\ResourceControllerContract;
-use InetStudio\Classifiers\Groups\Contracts\Http\Responses\Back\Resource\FormResponseContract;
-use InetStudio\Classifiers\Groups\Contracts\Http\Responses\Back\Resource\SaveResponseContract;
-use InetStudio\Classifiers\Groups\Contracts\Http\Responses\Back\Resource\IndexResponseContract;
-use InetStudio\Classifiers\Groups\Contracts\Http\Responses\Back\Resource\DestroyResponseContract;
+use InetStudio\Classifiers\Entries\Contracts\Services\Back\ItemsServiceContract;
+use InetStudio\Classifiers\Entries\Contracts\Services\Back\DataTableServiceContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Requests\Back\SaveItemRequestContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Controllers\Back\ResourceControllerContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\SaveResponseContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\FormResponseContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\IndexResponseContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\DestroyResponseContract;
 
 /**
  * Class ResourceController.
@@ -21,18 +21,18 @@ class ResourceController extends Controller implements ResourceControllerContrac
     /**
      * Список объектов.
      *
-     * @param  DataTableServiceContract  $dataTableService
+     * @param  DataTableServiceContract  $datatablesService
      *
      * @return IndexResponseContract
      *
      * @throws BindingResolutionException
      */
-    public function index(DataTableServiceContract $dataTableService): IndexResponseContract
+    public function index(DataTableServiceContract $datatablesService): IndexResponseContract
     {
-        $table = $dataTableService->html();
+        $table = $datatablesService->html();
 
         return $this->app->make(
-            IndexResponseContract::class, 
+            IndexResponseContract::class,
             [
                 'data' => compact('table'),
             ]
@@ -50,10 +50,10 @@ class ResourceController extends Controller implements ResourceControllerContrac
      */
     public function create(ItemsServiceContract $resourceService): FormResponseContract
     {
-        $item = $resourceService->getItemById();
+        $item = $resourceService->getItemByID();
 
         return $this->app->make(
-            FormResponseContract::class,
+            FormResponseContract::class, 
             [
                 'data' => compact('item'),
             ]
@@ -70,8 +70,10 @@ class ResourceController extends Controller implements ResourceControllerContrac
      *
      * @throws BindingResolutionException
      */
-    public function store(ItemsServiceContract $resourceService, SaveItemRequestContract $request): SaveResponseContract
-    {
+    public function store(
+        ItemsServiceContract $resourceService,
+        SaveItemRequestContract $request
+    ): SaveResponseContract {
         return $this->save($resourceService, $request);
     }
 
@@ -87,14 +89,10 @@ class ResourceController extends Controller implements ResourceControllerContrac
      */
     public function edit(ItemsServiceContract $resourceService, int $id = 0): FormResponseContract
     {
-        $item = $resourceService->getItemById(
-            $id, [
-            'columns' => ['description'],
-        ]
-        );
+        $item = $resourceService->getItemByID($id);
 
         return $this->app->make(
-            FormResponseContract::class,
+            FormResponseContract::class, 
             [
                 'data' => compact('item'),
             ]
@@ -131,18 +129,21 @@ class ResourceController extends Controller implements ResourceControllerContrac
      *
      * @throws BindingResolutionException
      */
-    private function save(
+    protected function save(
         ItemsServiceContract $resourceService,
         SaveItemRequestContract $request,
         int $id = 0
     ): SaveResponseContract {
         $data = $request->only($resourceService->model->getFillable());
+        $data['groups'] = $request->get('groups') ?? [];
 
         $item = $resourceService->save($data, $id);
 
         return $this->app->make(
-            SaveResponseContract::class,
-            compact('item')
+            SaveResponseContract::class, 
+            [
+                'item' => $item,
+            ]
         );
     }
 
@@ -161,7 +162,7 @@ class ResourceController extends Controller implements ResourceControllerContrac
         $result = $resourceService->destroy($id);
 
         return $this->app->make(
-            DestroyResponseContract::class,
+            DestroyResponseContract::class, 
             [
                 'result' => ($result === null) ? false : $result,
             ]

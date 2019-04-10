@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::group(
     [
         'namespace' => 'InetStudio\Classifiers\Groups\Contracts\Http\Controllers\Back',

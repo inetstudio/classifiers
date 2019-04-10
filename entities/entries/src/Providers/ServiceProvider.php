@@ -4,12 +4,12 @@ namespace InetStudio\Classifiers\Entries\Providers;
 
 use Collective\Html\FormBuilder;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 /**
- * Class EntriesServiceProvider.
+ * Class ServiceProvider.
  */
-class EntriesServiceProvider extends ServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
     /**
      * Загрузка сервиса.
@@ -28,13 +28,15 @@ class EntriesServiceProvider extends ServiceProvider
      */
     protected function registerConsoleCommands(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands(
-                [
-                    'InetStudio\Classifiers\Entries\Console\Commands\SetupCommand',
-                ]
-            );
+        if (! $this->app->runningInConsole()) {
+            return;
         }
+
+        $this->commands(
+            [
+                'InetStudio\Classifiers\Entries\Console\Commands\SetupCommand',
+            ]
+        );
     }
 
     /**
@@ -42,18 +44,22 @@ class EntriesServiceProvider extends ServiceProvider
      */
     protected function registerPublishes(): void
     {
-        if ($this->app->runningInConsole()) {
-            if (! Schema::hasTable('classifiers_entries')) {
-                $timestamp = date('Y_m_d_His', time());
-                $this->publishes(
-                    [
-                        __DIR__.'/../../database/migrations/create_classifiers_entries_tables.php.stub' => database_path(
-                            'migrations/'.$timestamp.'_create_classifiers_entries_tables.php'
-                        ),
-                    ], 'migrations'
-                );
-            }
+        if (! $this->app->runningInConsole()) {
+            return;
         }
+
+        if (Schema::hasTable('classifiers_entries')) {
+            return;
+        }
+
+        $timestamp = date('Y_m_d_His', time());
+        $this->publishes(
+            [
+                __DIR__.'/../../database/migrations/create_classifiers_entries_tables.php.stub' => database_path(
+                    'migrations/'.$timestamp.'_create_classifiers_entries_tables.php'
+                ),
+            ], 'migrations'
+        );
     }
 
     /**
@@ -78,7 +84,8 @@ class EntriesServiceProvider extends ServiceProvider
     protected function registerFormComponents()
     {
         FormBuilder::component(
-            'classifiers', 'admin.module.classifiers.entries::back.forms.fields.entries',
+            'classifiers',
+            'admin.module.classifiers.entries::back.forms.fields.entries',
             ['name' => null, 'value' => null, 'attributes' => null]
         );
     }
