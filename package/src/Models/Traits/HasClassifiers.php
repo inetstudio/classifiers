@@ -307,37 +307,24 @@ trait HasClassifiers
      */
     public function hasAllClassifiers($classifiers): bool
     {
-        if (is_string($classifiers)) {
-            return $this->classifiers->contains('alias', $classifiers);
+        if ($this->isClassifiersStringBased($classifiers)) {
+            $classifiers = (array) $classifiers;
+
+            return $this->classifiers->pluck('alias')->intersect($classifiers)->count() == count($classifiers);
         }
 
-        // Single Classifier id
-        if (is_int($classifiers)) {
-            return $this->classifiers->contains('id', $classifiers);
+        if ($this->isClassifiersIntBased($classifiers)) {
+            $classifiers = (array) $classifiers;
+
+            return $this->classifiers->pluck('id')->intersect($classifiers)->count() == count($classifiers);
         }
 
-        // Single Classifier model
         if ($classifiers instanceof EntryModelContract) {
             return $this->classifiers->contains('alias', $classifiers['alias']);
         }
 
-        // Array of Classifier aliases
-        if (is_array($classifiers) && isset($classifiers[0]) && is_string($classifiers[0])) {
-            return $this->classifiers->pluck('alias')->count() === count($classifiers)
-                && $this->classifiers->pluck('alias')->diff($classifiers)->isEmpty();
-        }
-
-        // Array of Classifier ids
-        if (is_array($classifiers) && isset($classifiers[0]) && is_int($classifiers[0])) {
-            return $this->classifiers->pluck('id')->count() === count($classifiers)
-                && $this->classifiers->pluck('id')->diff($classifiers)->isEmpty();
-        }
-
-        // Collection of Classifier models
         if ($classifiers instanceof Collection) {
-            return $this->classifiers->count() === $classifiers->count() && $this->classifiers->diff(
-                    $classifiers
-                )->isEmpty();
+            return $this->classifiers->intersect($classifiers)->count() == $classifiers->count();
         }
 
         return false;
