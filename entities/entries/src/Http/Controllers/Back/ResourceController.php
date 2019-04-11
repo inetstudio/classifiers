@@ -8,8 +8,8 @@ use InetStudio\Classifiers\Entries\Contracts\Services\Back\ItemsServiceContract;
 use InetStudio\Classifiers\Entries\Contracts\Services\Back\DataTableServiceContract;
 use InetStudio\Classifiers\Entries\Contracts\Http\Requests\Back\SaveItemRequestContract;
 use InetStudio\Classifiers\Entries\Contracts\Http\Controllers\Back\ResourceControllerContract;
-use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\SaveResponseContract;
 use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\FormResponseContract;
+use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\SaveResponseContract;
 use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\IndexResponseContract;
 use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\DestroyResponseContract;
 
@@ -53,7 +53,7 @@ class ResourceController extends Controller implements ResourceControllerContrac
         $item = $resourceService->getItemByID();
 
         return $this->app->make(
-            FormResponseContract::class, 
+            FormResponseContract::class,
             [
                 'data' => compact('item'),
             ]
@@ -92,7 +92,7 @@ class ResourceController extends Controller implements ResourceControllerContrac
         $item = $resourceService->getItemByID($id);
 
         return $this->app->make(
-            FormResponseContract::class, 
+            FormResponseContract::class,
             [
                 'data' => compact('item'),
             ]
@@ -139,7 +139,7 @@ class ResourceController extends Controller implements ResourceControllerContrac
         $item = $resourceService->save($data, $id);
 
         return $this->app->make(
-            SaveResponseContract::class, 
+            SaveResponseContract::class,
             [
                 'item' => $item,
             ]
@@ -161,7 +161,7 @@ class ResourceController extends Controller implements ResourceControllerContrac
         $result = $resourceService->destroy($id);
 
         return $this->app->make(
-            DestroyResponseContract::class, 
+            DestroyResponseContract::class,
             [
                 'result' => ($result === null) ? false : $result,
             ]
