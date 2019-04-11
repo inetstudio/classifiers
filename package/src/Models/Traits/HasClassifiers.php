@@ -26,9 +26,9 @@ trait HasClassifiers
 
     /**
      * Get Classifier class name.
-     * 
+     *
      * @return string
-     * 
+     *
      * @throws BindingResolutionException
      */
     public function getClassifierClassName(): string
