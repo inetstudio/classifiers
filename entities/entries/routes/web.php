@@ -9,15 +9,15 @@ Route::group(
         'prefix' => 'back/classifiers',
     ],
     function () {
-        Route::any('entries/data', 'EntriesDataControllerContract@data')
+        Route::any('entries/data', 'DataControllerContract@data')
             ->name('back.classifiers.entries.data.index');
 
-        Route::post('entries/suggestions/{group?}', 'EntriesUtilityControllerContract@getSuggestions')
+        Route::post('entries/suggestions/{group?}', 'UtilityControllerContract@getSuggestions')
             ->name('back.classifiers.entries.getSuggestions');
 
         Route::resource(
             'entries',
-            'EntriesControllerContract',
+            'ResourceControllerContract',
             [
                 'as' => 'back.classifiers',
             ]
