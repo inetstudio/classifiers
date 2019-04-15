@@ -7,6 +7,11 @@ build:
         override:
           - php-scrutinizer-run
           - phpcs-run
+filter:
+  excluded_paths:
+    - 'entities/entries/resources/'
+    - 'entities/groups/resources/'
+    - 'package/resources/'
 checks:
   php:
     verify_property_names: true
