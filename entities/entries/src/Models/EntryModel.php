@@ -19,7 +19,7 @@ class EntryModel extends Model implements EntryModelContract
     use SoftDeletes;
     use BuildQueryScopeTrait;
 
-    const MATERIAL_TYPE = 'classifiers_entry';
+    const ENTITY_TYPE = 'classifiers_entry';
 
     /**
      * Should the timestamps be audited?
@@ -97,13 +97,13 @@ class EntryModel extends Model implements EntryModelContract
     }
 
     /**
-     * Тип материала.
+     * Геттер атрибута type.
      *
      * @return string
      */
     public function getTypeAttribute(): string
     {
-        return self::MATERIAL_TYPE;
+        return self::ENTITY_TYPE;
     }
 
     /**

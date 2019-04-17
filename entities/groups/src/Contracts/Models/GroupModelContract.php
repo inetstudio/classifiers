@@ -2,25 +2,12 @@
 
 namespace InetStudio\Classifiers\Groups\Contracts\Models;
 
-use ArrayAccess;
-use JsonSerializable;
 use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Contracts\Queue\QueueableEntity;
+use InetStudio\AdminPanel\Base\Contracts\Models\BaseModelContract;
 
 /**
  * Interface GroupModelContract.
  */
-interface GroupModelContract extends ArrayAccess, Arrayable, Auditable, Jsonable, JsonSerializable, QueueableEntity, UrlRoutable
+interface GroupModelContract extends BaseModelContract, Auditable
 {
-    /**
-     * Reload a fresh model instance from the database.
-     *
-     * @param  array|string  $with
-     *
-     * @return static|null
-     */
-    public function fresh($with = []);
 }

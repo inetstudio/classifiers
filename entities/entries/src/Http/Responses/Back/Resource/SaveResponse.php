@@ -3,14 +3,13 @@
 namespace InetStudio\Classifiers\Entries\Http\Responses\Back\Resource;
 
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Support\Responsable;
 use InetStudio\Classifiers\Entries\Contracts\Models\EntryModelContract;
 use InetStudio\Classifiers\Entries\Contracts\Http\Responses\Back\Resource\SaveResponseContract;
 
 /**
  * Class SaveResponse.
  */
-class SaveResponse implements SaveResponseContract, Responsable
+class SaveResponse implements SaveResponseContract
 {
     /**
      * @var EntryModelContract
