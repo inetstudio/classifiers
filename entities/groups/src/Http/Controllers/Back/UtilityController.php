@@ -26,14 +26,11 @@ class UtilityController extends Controller implements UtilityControllerContract
      */
     public function getSuggestions(UtilityServiceContract $utilityService, Request $request): SuggestionsResponseContract
     {
-        $search = $request->get('q', '');
-        $type = $request->get('type', '');
+        $search = $request->get('q', '') ?? '';
+        $type = $request->get('type', '') ?? '';
 
         $items = $utilityService->getSuggestions($search);
 
-        return $this->app->make(
-            SuggestionsResponseContract::class,
-            compact('items', 'type')
-        );
+        return $this->app->make(SuggestionsResponseContract::class, compact('items', 'type'));
     }
 }
