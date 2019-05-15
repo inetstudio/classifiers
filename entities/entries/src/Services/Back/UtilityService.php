@@ -26,16 +26,28 @@ class UtilityService extends BaseService implements UtilityServiceContract
      * Получаем подсказки.
      *
      * @param  string  $search
+     * @param  string $group
      *
      * @return Collection
      */
-    public function getSuggestions(string $search): Collection
+    public function getSuggestions(string $search, string $group = ''): Collection
     {
-        $items = $this->model::where(
+        $builder = $this->model::where(
             [
                 ['value', 'LIKE', '%'.$search.'%'],
             ]
-        )->get();
+        );
+
+        if ($group) {
+            $builder->whereHas(
+                'groups',
+                function ($query) use ($group) {
+                    $query->where('name', '=', $group)->orWhere('alias', '=', $group);
+                }
+            );
+        }
+
+        $items = $builder->get();
 
         return $items;
     }

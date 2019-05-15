@@ -16,11 +16,13 @@ interface UtilityControllerContract
      *
      * @param  UtilityServiceContract  $utilityService
      * @param  Request  $request
+     * @param  string $group
      *
      * @return SuggestionsResponseContract
      */
     public function getSuggestions(
         UtilityServiceContract $utilityService,
-        Request $request
+        Request $request,
+        string $group = ''
     ): SuggestionsResponseContract;
 }
