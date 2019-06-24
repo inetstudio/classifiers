@@ -9,7 +9,7 @@
         'title' => 'Группы',
     ],
     'field' => [
-        'class' => 'select2 form-control',
+        'class' => 'select2-drop form-control',
         'data-placeholder' => 'Выберите группы',
         'style' => 'width: 100%',
         'multiple' => 'multiple',

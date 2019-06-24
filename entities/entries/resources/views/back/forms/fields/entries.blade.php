@@ -17,7 +17,7 @@
         'title' => $attributes['label']['title'],
     ],
     'field' => array_merge([
-        'class' => 'select2 form-control',
+        'class' => 'select2-drop form-control',
         'data-placeholder' => $attributes['field']['placeholder'],
         'style' => 'width: 100%',
         'data-source' => route('back.classifiers.entries.getSuggestions', ['group' => $attributes['field']['group']]),
