@@ -17,6 +17,7 @@
         'title' => $attributes['label']['title'],
     ],
     'field' => array_merge([
+        'id' => 'classifiers_'.md5($attributes['field']['group']),
         'class' => 'select2-drop form-control',
         'data-placeholder' => $attributes['field']['placeholder'],
         'style' => 'width: 100%',
