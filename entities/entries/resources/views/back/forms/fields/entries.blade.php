@@ -22,6 +22,7 @@
         'data-placeholder' => $attributes['field']['placeholder'],
         'style' => 'width: 100%',
         'data-source' => route('back.classifiers.entries.getSuggestions', ['group' => $attributes['field']['group']]),
+        'data-allow-clear' => $attributes['field']['data-allow-clear'] ?? 'false',
     ], ((! isset($attributes['field']['multiple'])) || isset($attributes['field']['multiple']) && $attributes['field']['multiple']) ? ['multiple' => 'multiple'] : [],
        (isset($attributes['field']['readonly']) && $attributes['field']['readonly']) ? ['readonly' => 'readonly'] : []
     ),
