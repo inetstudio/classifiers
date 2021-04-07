@@ -119,7 +119,7 @@ trait HasClassifiers
     public function scopeWithAllClassifiers(Builder $query, $classifiers, string $column = 'id'): Builder
     {
         $classifiers = $this->isClassifiersStringBased($classifiers)
-            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column);
+            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column)->toArray();
 
         collect($classifiers)->each(
             function ($classifier) use ($query, $column) {
@@ -149,7 +149,7 @@ trait HasClassifiers
     public function scopeWithAnyClassifiers(Builder $query, $classifiers, string $column = 'id'): Builder
     {
         $classifiers = $this->isClassifiersStringBased($classifiers)
-            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column);
+            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column)->toArray();
 
         return $query->whereHas(
             'classifiers',
@@ -189,7 +189,7 @@ trait HasClassifiers
     public function scopeWithoutClassifiers(Builder $query, $classifiers, string $column = 'alias'): Builder
     {
         $classifiers = $this->isClassifiersStringBased($classifiers)
-            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column);
+            ? $classifiers : $this->hydrateClassifiers($classifiers)->pluck($column)->toArray();
 
         return $query->whereDoesntHave(
             'classifiers',
